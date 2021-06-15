@@ -1,0 +1,38 @@
+#include <GnuSys.gh>
+
+//typedef char  *PSZ;
+//typedef short UINT;
+
+typedef struct _func
+   {
+   PSZ  pszName;
+   UINT uSize;
+   PSZ  pszCode;
+   PSZ  pszGlobals;
+   struct _func *left;
+   struct _func *right;
+   } FUNC;
+typedef FUNC *PFUNC;
+
+
+void PrintTree (PFUNC p)
+   {
+   if (!p)
+      return;
+
+   PrintTree (p->left);
+   printf ("Name:%-16s SIZE:%d\n", p->pszName, p->uSize);
+   PrintTree (p->right);
+   }
+
+
+int main (int argc, char *argv[])
+   {
+   PFUNC p;
+
+   p = (PFUNC)SetPtr();
+
+   PrintTree (p);
+
+   return 0;
+   }

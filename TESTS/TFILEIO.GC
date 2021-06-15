@@ -1,0 +1,106 @@
+#include <gnusys.gh>
+
+
+/***************************************************************************/
+/*                                                                         */
+/* File Reading/Writing                                                    */
+/*                                                                         */
+/***************************************************************************/
+
+char szFile[] = "tfileio.gc";
+
+int TestReadChars (void)
+   {
+   int    i;
+   void   *file;
+   char   s[16];
+
+   file = fopen (szFile, "rt");
+
+   printf ("Displaying 1st 500 bytes of file %s ...\n", szFile);
+   printf ("------------------------------------\n");
+   for (i=0; i<500; i++)
+      {
+      fread (s, 1, 1, file);
+      printf ("%c", *s);
+      }
+   printf ("\n\n");
+   fclose (file);
+   }
+
+
+int TestReadLines (void)
+   {
+   char szStr[256];
+   int  i;
+   void *file;
+
+   file = fopen (szFile, "rt");
+
+   printf ("Displaying file %s 1 line at a time ...\n", szFile);
+   printf ("------------------------------------\n");
+   for (i=0; FilReadLine (file, szStr, ";", 256) != -1; i++)
+      {
+      printf ("%3.3d> %s\n", i, szStr);
+      }
+   printf ("\n\n");
+   fclose (file);
+   }
+
+
+int TestWriteFile (void)
+   {
+   PSZ    filename = "output";
+   void   *fp;
+   char   c;
+   int    i, j;
+
+   printf ("Creating File %s ...\n", filename);
+
+   fp = fopen (filename, "wt");
+   if (!fp)
+      return printf ("Could not open file: %s\n", filename);
+
+   c = 0;
+   for (i=0; i<512; i++)
+      {
+
+      if (! i%64)
+         {
+         fwrite ("\n", 1, 1, fp);
+         printf (".");
+         }
+      fwrite (&c, 1, 1, fp);
+      c++;
+      } 
+   fclose (fp);
+   printf ("\n");
+   return 0;
+   }
+
+/***************************************************************************/
+/*                                                                         */
+/*                                                                         */
+/*                                                                         */
+/***************************************************************************/
+
+int prompt (PSZ psz)
+   {
+   int c;
+
+   printf ("Run test: %s ?", psz);
+   c = k_getch ();
+   printf ("\n");
+
+   return (c == 'Y' || c == 'y');
+   }
+
+int main (int argc, char *argv[])
+   {
+   if (prompt ("TestReadChars"))  TestReadChars ();
+   if (prompt ("TestReadLines"))  TestReadLines ();
+   if (prompt ("TestWriteFile"))  TestWriteFile ();
+
+   return 66;
+   }
+

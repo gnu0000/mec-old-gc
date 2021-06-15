@@ -1,0 +1,89 @@
+/*
+ *
+ * t5.gc
+ * Sunday, 4/6/1997.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+
+int test2 (void)
+   {
+   int  z, i, j, k;
+   char sz[64];
+
+   strcpy (sz, "Hello World");
+   i = *sz;
+   j = (int)*sz;
+   k = *(int *)sz;
+   printf ("i = *sz        = %d\n", i);
+   printf ("j = (int)*sz   = %d\n", j);
+   printf ("k = *(int *)sz = %d\n", k);
+   return 0;
+   }
+
+
+
+
+int main (int argc, char *argv[])
+   {
+   short s1, s2;
+   int   i1, i2;
+   long  l1, l2;
+
+   s1 = 55;
+   s2 = 66;
+   i1 = 55;
+   i2 = 66;
+   l1 = 55;
+   l2 = 66;
+
+   printf ("-------[set 1 - no casts, no l]---------------\n");
+   printf ("  lit: %d %d \n", 55, 66);
+   printf ("short: %d %d \n", s1, s2);
+   printf ("  int: %d %d \n", i1, i2);
+   printf (" long: %d %d \n", l1, l2);
+
+   printf ("-------[set 2 - cast to short, no l]---------------\n");
+   printf ("  lit: %d %d \n", (short)55, (short)66);
+   printf ("short: %d %d \n", (short)s1, (short)s2);
+   printf ("  int: %d %d \n", (short)i1, (short)i2);
+   printf (" long: %d %d \n", (short)l1, (short)l2);
+
+   printf ("-------[set 3 - cast to short, l]---------------\n");
+   printf ("  lit: %ld %ld \n", (short)55, (short)66);
+   printf ("short: %ld %ld \n", (short)s1, (short)s2);
+   printf ("  int: %ld %ld \n", (short)i1, (short)i2);
+   printf (" long: %ld %ld \n", (short)l1, (short)l2);
+
+   printf ("-------[set 4 - cast to int, no l]---------------\n");
+   printf ("  lit: %d %d \n", (int)55, (int)66);
+   printf ("short: %d %d \n", (int)s1, (int)s2);
+   printf ("  int: %d %d \n", (int)i1, (int)i2);
+   printf (" long: %d %d \n", (int)l1, (int)l2);
+
+   printf ("-------[set 5 - cast to int, l]---------------\n");
+   printf ("  lit: %ld %ld \n", (int)55, (int)66);
+   printf ("short: %ld %ld \n", (int)s1, (int)s2);
+   printf ("  int: %ld %ld \n", (int)i1, (int)i2);
+   printf (" long: %ld %ld \n", (int)l1, (int)l2);
+
+   printf ("-------[set 6 - cast to long, no l]---------------\n");
+   printf ("  lit: %d %d \n", (long)55, (long)66);
+   printf ("short: %d %d \n", (long)s1, (long)s2);
+   printf ("  int: %d %d \n", (long)i1, (long)i2);
+   printf (" long: %d %d \n", (long)l1, (long)l2);
+
+   printf ("-------[set 7 - cast to long, l]---------------\n");
+   printf ("  lit: %ld %ld \n", (long)55, (long)66);
+   printf ("short: %ld %ld \n", (long)s1, (long)s2);
+   printf ("  int: %ld %ld \n", (long)i1, (long)i2);
+   printf (" long: %ld %ld \n", (long)l1, (long)l2);
+
+   test2 ();
+
+   return 0;
+   }
+

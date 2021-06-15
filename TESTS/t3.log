@@ -1,0 +1,88 @@
+ID: 86  STR: decl list        LIT:                        
+p1:ID: 70  STR:int               LIT:                        
+p2:ID: 89  STR: function         LIT:                        
+   p1:ID: 79  STR: identifier       LIT:main                    
+   p2:ID: 86  STR: decl list        LIT:                        
+      p1:ID: 70  STR:int               LIT:                        
+      p2:ID: 90  STR: variable         LIT:                        
+         p1:ID: 79  STR: identifier       LIT:argc                    
+      xt: <next>
+      ID: 86  STR: decl list        LIT:                        
+      p1:ID: 68  STR:char              LIT:                        
+      p2:ID: 90  STR: variable         LIT:                        
+         p1:ID: 79  STR: identifier       LIT:argv                    
+   p4:ID: 87  STR: comp stmt        LIT:                        
+      p4:ID: 86  STR: decl list        LIT:                        
+         p1:ID: 70  STR:int               LIT:                        
+         p2:ID: 90  STR: variable         LIT:                        
+            p1:ID: 79  STR: identifier       LIT:i                       
+         xt: <next>
+         ID: 86  STR: decl list        LIT:                        
+         p1:ID: 79  STR: identifier       LIT:zzz                     
+         p2:ID: 90  STR: variable         LIT:                        
+            p1:ID: 79  STR: identifier       LIT:aa                      
+            p3:ID: 88  STR: expression       LIT:                        
+               p1:ID: 91  STR: literal          LIT:                        
+                  p1:ID: 83  STR: int literal      LIT:                        
+         xt: <next>
+         ID: 88  STR: expression       LIT:                        
+         p1:ID:  7  STR:=                 LIT:                        
+            p1:ID: 94  STR:unknown           LIT:                        
+               p1:ID: 34  STR:+                 LIT:                        
+                  p1:ID: 94  STR:unknown           LIT:                        
+                     p1:ID: 34  STR:+                 LIT:                        
+                        p1:ID: 90  STR: variable         LIT:                        
+                           p1:ID: 79  STR: identifier       LIT:aa                      
+                        p2:ID: 91  STR: literal          LIT:                        
+                           p1:ID: 83  STR: int literal      LIT:                        
+                  p2:ID: 91  STR: literal          LIT:                        
+                     p1:ID: 83  STR: int literal      LIT:                        
+            p2:ID: 91  STR: literal          LIT:                        
+               p1:ID: 83  STR: int literal      LIT:                        
+         xt: <next>
+         ID: 88  STR: expression       LIT:                        
+         p1:ID:  7  STR:=                 LIT:                        
+            p1:ID: 94  STR:unknown           LIT:                        
+               p1:ID: 34  STR:+                 LIT:                        
+                  p1:ID: 94  STR:unknown           LIT:                        
+                     p1:ID: 34  STR:+                 LIT:                        
+                        p1:ID: 90  STR: variable         LIT:                        
+                           p1:ID: 79  STR: identifier       LIT:aa                      
+                        p2:ID: 91  STR: literal          LIT:                        
+                           p1:ID: 83  STR: int literal      LIT:                        
+                  p2:ID: 91  STR: literal          LIT:                        
+                     p1:ID: 83  STR: int literal      LIT:                        
+            p2:ID: 91  STR: literal          LIT:                        
+               p1:ID: 83  STR: int literal      LIT:                        
+         xt: <next>
+         ID: 88  STR: expression       LIT:                        
+         p1:ID: 89  STR: function         LIT:                        
+            p1:ID: 79  STR: identifier       LIT:printf                  
+            p2:ID: 88  STR: expression       LIT:                        
+               p1:ID: 91  STR: literal          LIT:                        
+                  p1:ID: 85  STR: string literal   LIT:                        
+               xt: <next>
+               ID: 88  STR: expression       LIT:                        
+               p1:ID: 94  STR:unknown           LIT:                        
+                  p1:ID: 34  STR:+                 LIT:                        
+                     p1:ID: 94  STR:unknown           LIT:                        
+                        p1:ID: 34  STR:+                 LIT:                        
+                           p1:ID: 90  STR: variable         LIT:                        
+                              p1:ID: 79  STR: identifier       LIT:aa                      
+                           p2:ID: 91  STR: literal          LIT:                        
+                              p1:ID: 83  STR: int literal      LIT:                        
+                     p2:ID: 91  STR: literal          LIT:                        
+                        p1:ID: 83  STR: int literal      LIT:                        
+               xt: <next>
+               ID: 88  STR: expression       LIT:                        
+               p1:ID: 94  STR:unknown           LIT:                        
+                  p1:ID: 34  STR:+                 LIT:                        
+                     p1:ID: 94  STR:unknown           LIT:                        
+                        p1:ID: 34  STR:+                 LIT:                        
+                           p1:ID: 90  STR: variable         LIT:                        
+                              p1:ID: 79  STR: identifier       LIT:aa                      
+                           p2:ID: 91  STR: literal          LIT:                        
+                              p1:ID: 83  STR: int literal      LIT:                        
+                     p2:ID: 91  STR: literal          LIT:                        
+                        p1:ID: 83  STR: int literal      LIT:                        
+

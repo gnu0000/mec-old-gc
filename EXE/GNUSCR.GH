@@ -1,0 +1,379 @@
+/*
+ * GnuScr.gh
+ *
+ * (C) 1992-1995 Info Tech Inc.
+ *
+ * Craig Fitzgerald
+ *
+ * This file is part of the EBS module
+ *
+ * This file provides base screen and cursor handling functions
+ * and base screen read / write finctions.
+ *
+ ****************************************************************************
+ *
+ *  QUICK REF FUNCTION INDEX
+ *  ========================
+ * 
+ * SCR Functions
+ * -------------
+ *
+ * PMET ScrInitMetrics (void)
+ * PMET ScrGetMetrics (void)
+ * void ScrGetScreenSize (puY, puX)
+ * UINT ScrSetScreenSize (uLines)
+ * BOOL ScrRestoreScreen (void)
+ *
+ * BOOL ScrAttachIO (uFast)
+ * BOOL ScrIsEgaVga(void)
+ * void ScrSetIntenseBkg (bIntense)
+ * void ScrGetDACReg (uDacReg, puRed, puGrn, puBlu)
+ * void ScrSetDACReg (uDacReg, uRed,  uGrn,  uBlu)
+ * UINT ScrGetPALReg (uPalReg)
+ * void ScrSetPALReg (uPalReg, uRegVal)
+ * void ScrStoreColors ()
+ * void ScrRestoreColors ()
+ *
+ * UINT ScrReadBlk     (p, puLen, y, x)
+ * UINT ScrReadStr     (psz, uLen, y, x)
+ * UINT ScrWriteBlk    (p, uLen, y, x)
+ * UINT ScrWriteStr    (psz, uLen, y, x)
+ * UINT ScrWriteStrAtt (psz, uLen, y, x, uAtt)
+ * UINT ScrWriteNCell  (p, uLen, y, x)
+ * void ScrScrollDown  (uTop, uLeft, uBottom, uRight, uLines, uFillAtt);
+ * void ScrScrollUp    (uTop, uLeft, uBottom, uRight, uLines, uFillAtt);
+ * UINT ScrScrollLR    (uYTop,uLeft, uBottom, uRight, uLines, bLeft);
+ * void ScrClear (uTop, uLeft, uBottom, uRight, uChar, uFillAtt);
+ *
+ * void ScrGetCursorPos (puYPos, puXPos)
+ * void ScrSetCursorPos (uYPos, uXPos)
+ * void ScrShowCursor (bShow)
+ * void ScrPushCursor (bShow)
+ * void ScrPopCursor (void)
+ *
+ * PMET scrCheckGetMetrics (void)
+ *
+ * UINT ScrIncrementColor (uModColor, uStartColor)
+ *
+ *
+ * void Int10 (uAX, uBX, uCX, uDX)
+ * UINT Int10GetReg (uReg)
+ *
+ ****************************************************************************
+ */
+
+
+/****************************************************************************
+ **                                                                        **
+ *                        Structures and Types                              *
+ *                         defines and macros                               *
+ **                                                                        **
+ ****************************************************************************/
+
+///*
+// * This fn stores metric info about the physical display area
+// * It is created by the ScrInitMetrics fn.
+// */
+//typedef struct
+//   {
+//   UINT  uYSize;         // working line count for display purposes
+//   UINT  uXSize;         // working row count for display purposes
+//
+//   UINT  uYScrSize;      // screen buffer geometry
+//   UINT  uXScrSize;      // screen buffer geometry
+//   UINT  uYOldSize;      // original line count
+//   UINT  uXOldSize;      // original row count
+//
+//   UINT  uFastIO;        // Set True if using direct video io
+//   PBYTE pScr;           // ptr to screen buffer
+//   BYTE  cOriginal;      // original screen attribute
+//   BOOL  bColorDisplay;  //
+//   BOOL  bDACMod;        // 
+//   BOOL  bInit;          // Set TRUE after ScrInitMetrics
+//   } MET;
+//typedef MET *PMET;
+
+/*
+ * This fn stores metric info about the physical display area
+ * It is created by the ScrInitMetrics fn.
+ */
+typedef struct
+   {
+   USHORT  uYSize;         // working line count for display purposes
+   USHORT  uXSize;         // working row count for display purposes
+
+   USHORT  uYScrSize;      // screen buffer geometry
+   USHORT  uXScrSize;      // screen buffer geometry
+   USHORT  uYOldSize;      // original line count
+   USHORT  uXOldSize;      // original row count
+
+   USHORT  uFastIO;        // Set True if using direct video io
+   PBYTE   pScr;           // ptr to screen buffer
+   BYTE    cOriginal;      // original screen attribute
+   USHORT  bColorDisplay;  //
+   USHORT  bDACMod;        // 
+   USHORT  bInit;          // Set TRUE after ScrInitMetrics
+   } MET;
+typedef MET *PMET;
+
+
+/****************************************************************************
+ **                                                                        **
+ *                           Scr Functions                                  *
+ **                                                                        **
+ ****************************************************************************/
+
+
+/*
+ * This should be the first function called in this module.  This
+ * initializes the screen metric information needed to restore the
+ * cursor and screen ...
+ *
+ */
+PMET CCONV ScrInitMetrics (void):1000 ;
+
+
+/*
+ * this returns the metric structure.
+ * ScrInitMetrics must be called first
+ */
+PMET CCONV ScrGetMetrics (void):1001 ;
+
+
+/*
+ * sets address of start of video memory
+ * you don't need this
+ */
+void CCONV ScrSetVideoBase (ULONG ulAddr):1002 ;
+
+
+
+/*
+ * Returns the number of rows/cols on screen
+ *
+ *
+ */
+UINT CCONV ScrGetScreenSize (PUINT puY, PUINT puX):1003 ;
+
+
+/*
+ *
+ *
+ */
+BOOL CCONV ScrSetScreenSize (UINT uYSize, UINT uXSize):1004 ;
+
+
+/*
+ * restores screen mode
+ * and resets DAC regs if they were changed
+ */
+BOOL CCONV ScrRestoreScreen (void):1005 ;
+
+
+/*
+ *
+ * Under DOS  this returns true if we are running with  EGA or VGA
+ * Under OS/2 this doesn't always work
+ *
+ */
+BOOL CCONV ScrIsEgaVga(void):1006 ;
+
+
+/******************************************************************/
+
+/*
+ * Scrolls a screen down
+ *
+ */
+void CCONV ScrScrollDown (UINT uTop,    UINT uLeft,
+                           UINT uBottom, UINT uRight,
+                           UINT uLines,  UINT uFillAtt):1007 ;
+
+
+/*
+ * Scrolls a screen up
+ *
+ */
+void CCONV ScrScrollUp (UINT uTop,    UINT uLeft,
+                         UINT uBottom, UINT uRight,
+                         UINT uLines,  UINT uFillAtt):1008 ;
+
+
+/*
+ * Scrolls a screen Left or right
+ * This fn does not fill new area
+ */
+UINT CCONV ScrScrollLR (UINT uYTop,    UINT uXLeft, 
+                        UINT uYBottom, UINT uXRight, 
+                        UINT uCount,   BOOL bLeft):1009 ;
+
+
+/*
+ *  Clears a screen area
+ *
+ */
+void CCONV ScrClear (UINT uTop,    UINT uLeft, 
+                      UINT uBottom, UINT uRight, 
+                      UINT uChar,   UINT uAtt):1010 ;
+
+
+
+/*
+ * for this to work, you must:
+ * 1> Be in DOS
+ * 2> Have a VGA/EGA adapter
+ * 3> Have a color monitor
+ */
+void CCONV ScrSetIntenseBkg (BOOL bIntense):1011 ;
+
+
+/*
+ *
+ *
+ */
+void CCONV ScrGetDACReg (UINT uDacReg, PUINT puRed, PUINT puGrn, PUINT puBlu):1012 ;
+
+/*
+ *
+ *
+ */
+void CCONV ScrSetDACReg (UINT uDacReg, UINT uRed, UINT uGrn, UINT uBlu):1013 ;
+
+/*
+ *
+ *
+ */
+UINT CCONV ScrGetPALReg (UINT uPalReg):1014 ;
+
+/*
+ *
+ *
+ */
+void CCONV ScrSetPALReg (UINT uPalReg, UINT uRegVal):1015 ;
+
+
+void CCONV ScrStoreColors (void):1016 ;
+
+
+void CCONV ScrRestoreColors (void):1017 ;
+
+
+/*
+ *
+ *
+ */
+void CCONV ScrGetCursorPos (PUINT puY, PUINT puX):1018 ;
+
+
+/*
+ *
+ *
+ */
+void CCONV ScrSetCursorPos (UINT uYPos, UINT uXPos):1019 ;
+
+
+/*
+ * shows/hides the cursor
+ *
+ */
+void CCONV ScrShowCursor (BOOL bShow):1020 ;
+
+
+/*
+ * Returns TRUE if cursor is visible
+ *
+ */
+BOOL CCONV ScrCursorVisible (void):1021 ;
+
+
+/******************************************************************/
+
+
+/*
+ * Pushes the cursor pos/visibility onto the stack
+ * also shows/hides the cursor
+ */
+void CCONV ScrPushCursor (BOOL bShow):1022 ;
+
+
+/*
+ * Pops the cursor pos/visibility from the stack
+ *
+ */
+void CCONV ScrPopCursor (void):1023 ;
+
+
+/******************************************************************/
+
+/*
+ * This fn defines a video access type for the screen 
+ * reading/writing functions
+ *
+ * Init function for base screen read/write fn's.  This
+ * only needs to be called if you are using the OS/2
+ * libraries, under DOS in a bound program, and want to use the 
+ * fast I/O functions.
+ *
+ * using OS/2 libraries:
+ *    fast io is the default with DOS mode (bound exe's)
+ *    fast io does not work in OS/2
+ * using DOS libraries:
+ *    fast io is the only choice
+ *
+ */
+BOOL CCONV ScrAttachIO (UINT uFast):1024 ;
+
+
+/*
+ * Reads a CHAR/attrib block from the screen
+ */
+UINT CCONV ScrReadBlk  (PBYTE p, UINT uLen, UINT y, UINT x):1025 ;
+
+
+/*
+ * Reads a string from the screen
+ */
+UINT CCONV ScrReadStr  (PSZ psz, UINT uLen, UINT y, UINT x):1026 ;
+
+
+/*
+ * Writes a CHAR/attrib block to the screen
+ */
+UINT CCONV ScrWriteBlk (PBYTE p, UINT uLen, UINT y, UINT x):1027 ;
+
+
+/*
+ * Write a string to the screen
+ */
+UINT CCONV ScrWriteStr (PSZ psz, UINT uLen, UINT y, UINT x):1028 ;
+
+
+/*
+ * Write a string to the screen with a given att
+ */
+UINT CCONV ScrWriteStrAtt(PSZ psz, UINT uLen, UINT y, UINT x, UINT cAtt):1029 ;
+
+
+/*
+ * Writes a string of a specific cell to the screen 
+ * p is ptr to CHAR,att
+ */
+UINT CCONV ScrWriteNCell (PBYTE p, UINT uLen, UINT y, UINT x):1030 ;
+
+
+PMET CCONV scrCheckGetMetrics (void):1031 ;
+
+UINT CCONV Int10GetReg (UINT uReg):1032 ;
+
+void CCONV Int10 (UINT uAX, UINT uBX, UINT uCX, UINT uDX):1033 ;
+
+
+/*
+ * This fn changes the color associated with the uModColor palette index
+ * legal values for uModColor and uStartColor are 0 thru 15 (the pal colors)
+ * This fn is intended to be called several times
+ * Call with uPal>15 to initialize.
+ * The 1st 60 calls fade from the start color to the 1st rainbow color
+ * Then each cubsequent call slowly fades to different colors.
+ */
+UINT CCONV ScrIncrementColor (UINT uModColor, UINT uStartColor):1034 ;

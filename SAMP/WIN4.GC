@@ -1,0 +1,65 @@
+/*
+ *
+ * win4.gc
+ * Monday, 4/7/1997.
+ *
+ * This program must be executed using GX2, GX! does not contain
+ * the GNUWIN and GNUSCR library functions.
+ *
+ * This program is an example of GC using C file and windowing
+ * functions. Note that the #includes are not the standard C
+ * includes
+ */
+#include <gnusys.gh>
+#include <gnuscr.gh>
+#include <gnuwin.gh>
+
+#define MAX_LINES 250
+
+void Usage (void)
+   {
+   printf ("Usage WIN4 filename");
+   }
+
+int main (int argc, char *argv[])
+   {
+   PMET  pm;
+   PGW   pgw;
+   FILE  fp;
+   PSZ   pszFile, ppszList[MAX_LINES];
+   CHAR  sz[200];
+   INT   i, uLines;
+
+   pszFile = (argc <2 ? "win4.gc" : argv[1]);
+   fp = fopen (pszFile, "rt");
+   for (i=0; i < MAX_LINES; i++)
+      {
+      if (FilReadLine (fp, sz, "", sizeof(sz)) == -1)  
+         break;
+      ppszList[i] = strdup (sz);
+      }
+   fclose (fp);
+   uLines = i;
+
+   pm  = ScrInitMetrics ();
+   ScrStoreColors ();
+   ScrSetIntenseBkg (TRUE);
+   ScrClear (0, 0, 0, 0, (UINT)'°', 0x0C);
+   ScrSetDACReg (ScrGetPALReg (1), 15,  0,  15);
+
+   pgw = GnuCreateWin (20, 70, NULL);
+   pgw->pUser1         = (PVOID) ppszList;
+   pgw->uItemCount     = (USHORT)uLines;
+   pgw->bShowScrollPos = TRUE;
+
+   GnuPaintBorder (pgw);
+   GnuPaintWin (pgw, -1);
+
+   while ((i = KeyGet (TRUE)) != 0x1B)
+      GnuDoListKeys (pgw, i);
+
+   GnuDestroyWin (pgw);
+   ScrRestoreColors ();
+   return 0;
+   }
+

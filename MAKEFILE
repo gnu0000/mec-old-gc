@@ -1,0 +1,58 @@
+!IF "$(DEVELOP)" == "WAT11"
+PMK = gc-wat
+!ELSE
+PMK = gc-msc
+!ENDIF
+
+
+
+all:
+   cd gclib
+   nmake 
+   cd ..
+   premake $(PMK).Pre $(PMK).mak
+   nmake /nologo MODE=D -f $(PMK).mak all
+
+debug:
+   premake $(PMK).Pre $(PMK).mak
+   nmake /nologo MODE=D -f $(PMK).mak all
+
+mem:
+   premake $(PMK).Pre $(PMK).mak
+   nmake /nologo MODE=M -f $(PMK).mak all
+
+opt:
+   premake $(PMK).Pre $(PMK).mak
+   nmake /nologo MODE=O -f $(PMK).mak all
+
+gc:
+   premake $(PMK).Pre $(PMK).mak
+   nmake /nologo MODE=D -f $(PMK).mak gc
+
+gx:
+   premake $(PMK).Pre $(PMK).mak
+   nmake /nologo MODE=D -f $(PMK).mak gx
+
+gx2:
+   premake $(PMK).Pre $(PMK).mak
+   nmake /nologo MODE=D -f $(PMK).mak gx2
+
+gi:
+   premake $(PMK).Pre $(PMK).mak
+   nmake /nologo MODE=D -f $(PMK).mak gi
+
+dis:
+   premake $(PMK).Pre $(PMK).mak
+   nmake /nologo MODE=D -f $(PMK).mak dis
+
+clean:
+   cd gclib
+   nmake clean
+   cd ..
+   del dr\*.obj
+   del mr\*.obj
+   del or\*.obj
+   del d32\*.obj
+   del o32\*.obj
+
+

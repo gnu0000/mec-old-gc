@@ -1,0 +1,57 @@
+/*
+ *
+ * odbc1.gc
+ * Tuesday, 4/8/1997.
+ *
+ */
+#include <gnusys.gh>
+#include <gnuodbc.gh>
+
+int Test (void)
+   {
+   HENV   henv;
+   HDBC   hdbc;
+   HSTMT  hstmt;
+   SHORT  rc;
+   CHAR   szStmt[256], szCustID[256], szCustName[256];
+   INT    lLen1, lLen2;
+
+   if (SQLAllocEnv(&henv))
+      printf ("unable to initialize odbc dll\n");
+
+   SQLAllocConnect(henv, &hdbc);
+
+   if (SQLConnect(hdbc, "Northwind", SQL_NTS, NULL, SQL_NTS, NULL, SQL_NTS) < 0)
+      printf ("Unable to connect to ODBC data source: Northwind\n");
+
+   SQLAllocStmt(hdbc, &hstmt);
+
+   rc = SQLExecDirect(hstmt, "select * from Customers", SQL_NTS);
+   if (rc && rc != 1)
+      printf ("SQLExecFailed: %d\n", (int)rc);
+
+   SQLBindCol(hstmt, 1, SQL_C_CHAR, (PVOID)szCustID, sizeof(szCustID), &lLen1);
+   SQLBindCol(hstmt, 2, SQL_C_CHAR, (PVOID)szCustName, sizeof(szCustName), &lLen2);
+
+   while (TRUE)
+      {
+      rc = SQLFetch(hstmt);
+      if (rc && rc != 1)
+         break;
+
+      printf ("%s:   %s\n", szCustID, szCustName);
+      }
+   SQLFreeStmt(hstmt, SQL_DROP);
+   SQLDisconnect(hdbc);
+   SQLFreeConnect(hdbc);
+   SQLFreeEnv(henv);
+   return(0);
+   }
+
+int main (int argc, char *argv[])
+   {
+   Test ();
+   return 0;
+   }
+
+

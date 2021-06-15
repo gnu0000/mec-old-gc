@@ -1,0 +1,42 @@
+/*
+ *
+ * t1.gc
+ * Friday, 3/6/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+typedef int zzz[10];
+
+
+int main (int argc, char *argv[])
+   {
+   int i, array[25];
+   int *pi, *pa[25];
+
+
+   for (i=0; i<25; i++)
+      array[i] = i * i;
+
+   for (i=0; i<25; i++)
+      printf ("%3d ", array[i]);
+   printf ("\n");
+
+
+   for (i=0; i<25; i++)
+      {
+      pa[i] = malloc (sizeof (int));
+      *(pa[i]) = i * 2;
+      }
+
+   for (i=0; i<25; i++)
+      {
+      pi = pa[i];
+      printf ("%3d ", *pi);
+      }
+   printf ("\n");
+
+   return 0;
+   }
+

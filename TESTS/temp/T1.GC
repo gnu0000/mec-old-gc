@@ -1,0 +1,20 @@
+/*
+ *
+ * string.gc
+ * Thursday, 3/5/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+int main (int argc, char *argv[])
+   {
+   int  z, i, j, k;
+   char sz[64];
+
+   strcpy (sz, "Hello World");
+   k = *(int *)sz;
+   printf ("k=%d\n", k);
+   return 0;
+   }

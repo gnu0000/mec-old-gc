@@ -1,0 +1,24 @@
+/*
+ *
+ * t6.gc
+ * Friday, 3/6/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+int main (int argc, char *argv[])
+   {
+   float f1, f2, f3, *pf;
+
+   pf = &f1;
+
+   f1 = 123.456;
+   f2 = f1;
+   f3 = *pf;
+
+   printf ("f1=%lf f2=%lf f3=%lf pf=%lf\n", f1, f2, f3, *pf);
+   return 0;
+   }
+

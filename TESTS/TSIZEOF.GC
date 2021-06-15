@@ -1,0 +1,67 @@
+#include <gnusys.gh>
+
+#define MAX_LINES 250
+
+typedef struct _str1
+   {
+   int i;
+   float f;
+   } STRUCT1;
+typedef STRUCT1 *PSTRUCT1;
+
+int main (int argc, char *argv[])
+   {
+   CHAR    c, *pc, sz[200];
+   short   s, *ps;
+   int     i, *pi;
+   long    l, *pl;
+   float   f, *pf;
+   STRUCT1 st1, *pst1;
+   struct _str1 ast1, *past1;
+   float   fa[10];
+
+
+   printf ("sizeof(sz)=%d\n", sizeof (sz));
+
+
+   printf ("sizeof (char)     =%d\n", sizeof (char)     );
+   printf ("sizeof (c)        =%d\n", sizeof (c)        );
+   printf ("sizeof (char *)   =%d\n", sizeof (char *)   );
+   printf ("sizeof (pc)       =%d\n", sizeof (pc)       );
+
+
+   printf ("sizeof (short)    =%d\n", sizeof (short)    );
+   printf ("sizeof (s)        =%d\n", sizeof (s)        );
+   printf ("sizeof (short *)  =%d\n", sizeof (short *)  );
+   printf ("sizeof (ps)       =%d\n", sizeof (ps)       );
+
+
+   printf ("sizeof (int)      =%d\n", sizeof (int)      );
+   printf ("sizeof (i)        =%d\n", sizeof (i)        );
+   printf ("sizeof (int *)    =%d\n", sizeof (int *)    );
+   printf ("sizeof (pi)       =%d\n", sizeof (pi)       );
+
+   printf ("sizeof (long)     =%d\n", sizeof (long)     );
+   printf ("sizeof (l)        =%d\n", sizeof (l)        );
+   printf ("sizeof (long *)   =%d\n", sizeof (long *)   );
+   printf ("sizeof (pl)       =%d\n", sizeof (pl)       );
+
+
+   printf ("sizeof (float)    =%d\n", sizeof (float)    );
+   printf ("sizeof (f)        =%d\n", sizeof (f)        );
+   printf ("sizeof (float *)  =%d\n", sizeof (float *)  );
+   printf ("sizeof (pf)       =%d\n", sizeof (pf)       );
+   printf ("sizeof (STRUCT1)  =%d\n", sizeof (STRUCT1)  );
+   printf ("sizeof (st1)      =%d\n", sizeof (st1)      );
+   printf ("sizeof (STRUCT1 *)=%d\n", sizeof (STRUCT1 *));
+   printf ("sizeof (pst1)     =%d\n", sizeof (pst1)     );
+
+// printf ("sizeof (struct _str1) =%d\n", sizeof (struct _str1) );
+   printf ("sizeof (ast1)         =%d\n", sizeof (ast1)         );
+// printf ("sizeof (struct *_str1)=%d\n", sizeof (struct *_str1));
+   printf ("sizeof (past1)        =%d\n", sizeof (past1)        );
+
+   printf ("sizeof (fa)       =%d\n", sizeof (fa)        );
+   }
+
+

@@ -1,0 +1,815 @@
+/*
+ * GnuWin.h
+ *
+ * (C) 1992-1995 Info Tech Inc.
+ *
+ * Craig Fitzgerald
+ *
+ * This file is part of the GNULIB module
+ *
+ * This file provides the windowing functions
+ *
+ ****************************************************************************
+ *
+ *  QUICK REF FUNCTION INDEX
+ *  ========================
+ * 
+ * GNU Windows Functions
+ * ---------------------
+ *
+ * GNU Window Creation/Destriction
+ * --------------------------------------------------
+ * PGW  GnuCreateWin (uYSize, uXSize, pPaintProc)
+ * PGW  GnuCreateWin2 (uYPos, uXPos, uYSize, uXSize, pPaintProc)
+ * PGW  GnuDestroyWin (pgw)
+ * void GnuPaintAtCreate (bDraw)
+ *
+ * GNU Window Painting functions
+ * --------------------------------------------------
+ * UINT GnuPaint (pgw,uRow,uCol,uJust,uAtt,pszText)
+ * UINT GnuPaintStr (pgw, uRow, uCol, uJust, uAtt, psz, ...)
+ * UINT GnuPaint2 (pgw, uRow, uCol, uJust, uAtt, PSZ pszText, uMaxLen)
+ * UINT GnuPaintBig (pgw, uYPos,uXPos,uYSize,uXSize,uJust,uAtt,PSZ pszText)
+ * UINT GnuPaintNChar (pgw, uRow,uCol,uJust,uAtt,cChar,uCount)
+ * void GnuPaintBorder (pgw)
+ * void GnuClearWin (pgw, uAtt, bIncludeBorder)
+ *
+ * GNU Window Settings
+ * --------------------------------------------------
+ * BOOL GnuMoveWin (pgw, uYPos, uXPos)
+ * UINT GnuGetColor (pgw, uType);
+ * UINT GnuSetColor (pgw, uType, uColor);
+ * UINT GnuGetAtt (pgw, uAttIDX)
+ * void GnuGetCursor (pgw, PpuY, PpuX)
+ * void GnuMoveCursor (pgw, uY, uX)
+ * void GnuPaintBorder (pgw)
+ * UINT GnuSetBorderChars (pgw, pszBC)
+ * UINT GnuDrawBox (uYPos,  uXPos, uYSize, uXSize, pszBDRCHR, uAtt)
+ * UINT GnuPaintLen (PSZ psz)
+ *
+ * GNU Window List specific functions
+ * --------------------------------------------------
+ * BOOL GnuPaintWin (pgw, uLine)
+ * BOOL GnuMakeVisible (pgw, uLine)
+ * BOOL GnuScrollTo  (pgw, uLine)
+ * void GnuScrollWin (pgw, uLines, bUp)
+ * BOOL GnuSelectLine (pgw, uLine, bOnScreen)
+ * BOOL GnuDoListKeys (pgw, cExtKey)
+ *
+ * GNU Window Utility Functions
+ * --------------------------------------------------
+ * BOOL GnuSelectColorsWindow (pgw)
+ * BOOL GnuModifyColorsWindow ()
+ * UINT GnuFileWindow (pszFile, pszMatch, pszHeader, pszWorkBuff)
+ * UINT GnuHexEdit (pszBuff, uOffset, uLines)
+ * UINT GnuMsg (pszHeader, psz1, psz2)
+ * UINT GnuMsgBox (pszHeader, pszFooter, pszChars, pszText)
+ * UINT GnuMsgBox2 (pszHeader, pszFooter, pszChars, uYSize,uXSize, uJust, uAtt, pszText)
+ * INT  GnuComboBox (ppsz, uY, uX, uYSize, iStartSel)
+ * void WinShimmer (pgw, cMask, cAttrib, uMax)
+ * UINT WinUsedColorList (pgw, uColorsToCheck)
+ *
+ * GNU Window Internal functions (minimal param checking)
+ * --------------------------------------------------
+ * PSZ  gnuScreenDat (uYPos, uXPos, uYSize, uXSize)
+ * BOOL gnuDisplayDat (pgw, bIncludeShadowArea)
+ * void gnuFreeDat (pgw)
+ * void gnuSwapDat (pgw, bIncludeShadowArea)
+ * void gnuWinToScreen (pgw, piY, piX)
+ * void gnuScreenToWin (pgw, piY, piX)
+ * void gnuClientWinToScreen (pgw, piY, piX)
+ * void gnuScreenToClientWin (pgw, piY, piX)
+ * void gnuShowScrollPos (pgw, uNewLine, bShow)
+ * void gnuDrawShadow (pgw)
+ * UINT gnuDefPaintProc (pgw, uIndex, uLine)
+ * BOOL gnuFixScroll (pgw)
+ * PSZ  gnuGetBorderChars (void)
+ *
+ * GNU Window Macros
+ * --------------------------------------------------
+ * UINT DisplayItems(pgw)
+ * UINT ScrollMax(pgw)
+ * BOOL InWindow(pgw,uLine)
+ * UINT RightOf(pgw)
+ * UINT BottomOf(pgw)
+ * UINT LeftOf(pgw)
+ * UINT TopOf(pgw)
+ * 
+ ****************************************************************************
+ *
+ * Using GNU Windows
+ * -----------------
+ *
+ *  The GnuCreateWin and GnuCreateWin2 functions are used to create static
+ *  and list windows (NOT Respectively).  Modification of the window is
+ *  done by changing the actual pgw structure.
+ *   To make a window a list window:
+ *
+ *      1> set pgw->uItemCount to a number other than 0
+ *
+ *      2> set pgw->uItemSize to the size of the item in lines.
+ *
+ *      3> set pgw->pUser1 to a ppsz containing the list data
+ *
+ *      4> optionally provide a user paint fn in the 3rd param of
+ *         the GnuCreateWin function. The default fn. treats pUser1
+ *         as a PPSZ with uItemCount strings, and paints the strings
+ *         left justified.
+ *
+ *      5> call GnuPaintWin (pgw, 0xFFFF)  (to repaint entire window)
+ *
+ *      6> you will probable then want to call GnuDoListKeys for
+ *         each extended (2-byte) key you get from the user, and it
+ *         will scroll the window for you.
+ *
+ *  If you want the interface to be selection oriented rather than view
+ *  oriented (IE UpArrow move the selection up 1 rather than scroll and
+ *  no selection) you will also want to:
+ *
+ *      7> set pgw->uSelection to a valid row number (use 0).
+ *
+ *
+ *
+ *  EXAMPLE #1:
+ *    This example creates a small message window to tell the user to
+ *    wait. When the work is finished, the window disappears, restoring
+ *    the window to its previous state.
+ *
+ *
+ *    ScrInitMetrics ();  //-- dont forget to call this first --//
+ *    .
+ *    .
+ *    
+ *    void DoWork (void)
+ *       {
+ *       PGW pgw;
+ *
+ *       pgw = GnuCreateWin (6, 20, NULL);
+ *       GnuPaint (pgwWorking, 1, 0, 3, 0, "Working ...");
+ *       GnuPaint (pgwWorking, 2, 0, 3, 0, "Please Wait");
+ *       DoLotsOfPainfullWork ();
+ *       GnuDestroyWin (pgwWorking);
+ *       }
+ *
+ *
+ *  EXAMPLE #2:
+ *    This example shows a list of data in a window 20 x 60.  The array
+ *    of strings and the count of strings is gottem by a fictitious fn
+ *    called GetPPSZData.
+ *
+ *
+ *    void DisplayDataInListWindow (void)
+ *       {
+ *       PGW     pgw;
+ *
+ *       //====== CREATE WINDOW ======//
+ *       pgw = GnuCreateWin (20, 60, NULL);
+ *       pgw->pszHeader = "[Data Log]";
+ *       pgw->pszFooter = "[use ,,PgUp,PgDn to view, press <ESC> to exit]";
+ *       pgw->pUser1         = GetPPSZData (&uNumItems);
+ *       pgw->uItemCount     = uNumItems;
+ *       pgw->bShowScrollPos = TRUE;
+ *       GnuPaintBorder (pgw);
+ *    // pgw->uSelection = 0;      //--- enable this to allow selections ---//
+ *       GnuPaintWin (pgw, 0xFFFF);
+ *
+ *       //====== HANDLE KEYBOARD INPUT ======//
+ *       while (TRUE)
+ *          {
+ *          //(c = getch ();
+ *          //if (c == 0x00 || c == 0xE0)    //--- Extended Key ---//
+ *          //  c = 0x100 + getch ();
+ *          c = KeyGet (TRUE);               //--- from GnuKbd ---//
+ *
+ *          if (c == 0x1B)                   //-- Look for ESC ---//
+ *             break;
+ *
+ *          if (!GnuDoListKeys (pgw, c)) //-- Auto handle scrolling --//
+ *             Beep (0);
+ *          }
+ *       GnuDestroyWin (pgw);      //--- This does NOT free pUser1 ---//
+ *       }
+ */
+
+
+
+/****************************************************************************
+ **                                                                        **
+ *                        Structures and Types                              *
+ *                         defines and macros                               *
+ **                                                                        **
+ ****************************************************************************/
+
+#define EV_BORDER        0x01     /* 0000000000000001 */
+#define EV_TOPBORDER     0x03     /* 0000000000000011 */
+#define EV_BOTTOMBORDER  0x05     /* 0000000000000101 */
+#define EV_LEFTBORDER    0x09     /* 0000000000001001 */
+#define EV_RIGHTBORDER   0x11     /* 0000000000010001 */
+#define EV_ANYBORDER     0x1F     /* 0000000000011111 */
+#define EV_INCX          0x20     /* 0000000000100000 */
+#define EV_INCY          0x40     /* 0000000001000000 */
+
+
+
+
+///*
+// * This is the GnuWindow structure.
+// * You get a handle (pointer) to this structure when you create a window
+// * and you pass this handle to all the window functions.
+// * You can also use this handle as a structure ptr to directly set values
+// *
+// * The top of this header shows an example of how to use this stuff.
+// *
+// */
+//typedef struct _GW
+//   {
+//   UINT  uYPos;             // Y position of the window
+//   UINT  uXPos;             // X position of the window
+//   UINT  uYSize;            // Window Vertical Size
+//   UINT  uXSize;            // Window Horizontal Size
+//   UINT  uClientYPos;       // Y position of the client area of the window
+//   UINT  uClientXPos;       // X position of the client area of the window
+//   UINT  uClientYSize;      // client area Vertical Size
+//   UINT  uClientXSize;      // client area Horizontal Size
+//   BYTE  bBorder;           // True = draw border
+//   BYTE  bShadow;           // True = draw shadow
+//   PSZ   pszScreenDat;      // buffer holding data under window
+//   PSZ   pszHeader;         // text on top border
+//   PSZ   pszFooter;         // text on bottom border
+//   PSZ   pszAtts;           // Window Attributes
+//   PSZ   pszBorder;         // border chars. use GnuSetBorder to change
+//   PVOID pUser1;            // user data, default place of listwin data
+//   PVOID pUser2;            // user data
+//   PVOID pUser3;            // user data
+//
+//   /*--- ListWin Metrics ---*/
+//   UINT      uScrollPos;    // Current Scroll Position (0 based)
+//   UINT      uSelection;    // Current Item Selection
+//   UINT      uItemCount;    // # of items in list
+//   UINT      uItemSize;     // # of lines per item
+//   PVOID     pPaintProc;    // proc to paint item in list
+//   BOOL      bShowScrollPos;// if true draws relative scroll pos thingie
+//   } GW;
+//typedef GW *PGW;
+
+typedef struct _GW
+   {
+   USHORT  uYPos;             // Y position of the window
+   USHORT  uXPos;             // X position of the window
+   USHORT  uYSize;            // Window Vertical Size
+   USHORT  uXSize;            // Window Horizontal Size
+   USHORT  uClientYPos;       // Y position of the client area of the window
+   USHORT  uClientXPos;       // X position of the client area of the window
+   USHORT  uClientYSize;      // client area Vertical Size
+   USHORT  uClientXSize;      // client area Horizontal Size
+   BYTE    bBorder;           // True = draw border
+   BYTE    bShadow;           // True = draw shadow
+   PSZ     pszScreenDat;      // buffer holding data under window
+   PSZ     pszHeader;         // text on top border
+   PSZ     pszFooter;         // text on bottom border
+   PSZ     pszAtts;           // Window Attributes
+   PSZ     pszBorder;         // border chars. use GnuSetBorder to change
+   PVOID   pUser1;            // user data, default place of listwin data
+   PVOID   pUser2;            // user data
+   PVOID   pUser3;            // user data
+
+   /*--- ListWin Metrics ---*/
+   USHORT  uScrollPos;        // Current Scroll Position (0 based)
+   USHORT  uSelection;        // Current Item Selection
+   USHORT  uItemCount;        // # of items in list
+   USHORT  uItemSize;         // # of lines per item
+   PVOID   pPaintProc;        // proc to paint item in list
+   USHORT  bShowScrollPos;    // if true draws relative scroll pos thingie
+   } GW;
+typedef GW *PGW;
+
+/*
+ * Structure specific macros for GW's
+ * Use there rather than the pgw directly
+ */
+#define DisplayItems(pgw)   (pgw->uClientYSize/pgw->uItemSize)
+#define ScrollMax(pgw)      (max (0, (int)pgw->uItemCount - (int)DisplayItems (pgw)))
+#define InWindow(pgw,uLine) ((uLine) >= pgw->uScrollPos && (uLine) < pgw->uScrollPos + DisplayItems (pgw))
+#define RightOf(pgw)        (pgw->uXPos + pgw->uXSize - 1)
+#define BottomOf(pgw)       (pgw->uYPos + pgw->uYSize - 1)
+#define LeftOf(pgw)         (pgw->uXPos)
+#define TopOf(pgw)          (pgw->uYPos)
+#define XSize(pgw)          (pgw->uXSize)
+#define YSize(pgw)          (pgw->uYSize)
+#define CXSize(pgw)         (pgw->uClientXSize)
+#define CYSize(pgw)         (pgw->uClientYSize)
+#define CXPos(pgw)          (pgw->uClientXPos)
+#define CYPos(pgw)          (pgw->uClientYPos)
+
+
+/****************************************************************************
+ **                                                                        **
+ *                         Gnu Window Functions                             *
+ **                                                                        **
+ ****************************************************************************
+ *
+ *  General notes:
+ *    > Gnu functions with attribute parameters:
+ *        If the fn param looks like this: "UINT uAtt" then the 
+ *        actual attribute used is based on this table:
+ *
+ *                uAtt     Forrground      Background
+ *                -----------------------------------
+ *                   0 - normal client FG  normal BG
+ *                   1 - bright client FG  normal BG
+ *                   2 - normal client FG  bright BG
+ *                   3 - bright client FG  bright BG
+ *                   4 - normal border FG  normal BG
+ *                   5 - bright border FG  normal BG
+ *               other - high 8 bits used as attribute
+ *
+ *        If you want the actual color, use GnuGetAtt to convert
+ *        the above uAtt to the color value.  See below for 
+ *        how to change the color values for uAtt = 0 to 5.
+ *
+ *    > Most fn's that have a PGW parameter will work if you pass
+ *      a NULL for its pgw.  But the action performed will be screen
+ *      oriented or global oriented rather than window oriented.
+ *
+ *    > List windows are just like static windows except that
+ *      pgw->uItemCount > 0
+ *
+ ****************************************************************************
+ */
+
+#define PAINTPROC PVOID
+
+/******************** Creation / Destruction ********************************/
+
+/*
+ * Creates a window with the given size, centered in the screen. 
+ * GnuCreateWin2 lets you position the window.
+ *
+ * The window can be treated as either a static or a list window.
+ * If using as a list, you can provide a ptr to a paint function
+ * in pGnuPaintProc, or leave NULL to use default paint fn.
+ * This fn returns a handle to the window.  Pass this handle to 
+ * Gnu functions to paint and manipulate the window.
+ */
+PGW CCONV GnuCreateWin (UINT uYSize, UINT uXSize, PAINTPROC pGnuPaintProc):1100 ;
+
+
+/*
+ * Same as above but creates at a specific place on the screen
+ * Windows are not created if they don't fit entirely on the screen.
+ */
+PGW CCONV GnuCreateWin2 (UINT      uYPos,  
+                          UINT      uXPos,
+                          UINT      uYSize, 
+                          UINT      uXSize, 
+                          PAINTPROC pGnuPaintProc):1101 ;
+
+
+/*
+ * frees associated memory, and restores previous contents of mem
+ * Restores underlying screen data unless pgw->pszScreenDat has
+ * been freed and set top NULL
+ */
+PGW CCONV GnuDestroyWin (PGW pgw):1102 ;
+
+
+/*
+ *  This BOOL determines if a window will be automatically painted
+ *  at creation time. If set to false, you must call
+ *     GnuClearWin (pgw, 0, TRUE)
+ *  when you want to display the window.  The primary use for this
+ *  is to allow you to set some structure values (ie b3Dch and b3Datt)
+ *  before the window is displayed. Note that the window is there, it
+ *  just hasn't been painted yet.
+ */
+void CCONV GnuPaintAtCreate (BOOL bDraw):1103 ;
+
+
+/************************** Painting ****************************************/
+
+
+/*
+ * These are the fn's used to paint in a window (or screen if pgw=NULL).
+ * The params are:
+ *
+ * pgw ------ The window, or the screen if null
+ * uRow ----- Starting Row
+ * uCol ----- Starting Col
+ * uJust ---- Justification:
+ *                   0 - left justify at uCol
+ *                   1 - right justify at uCol
+ *                   2 - ctr justify at uCol
+ *                   3 - horiz center on win, ignore uCol
+ *                   4 - vert center on win, ignore uRow
+ *                   5 - center on win, ignore uRow & uCol
+ *
+ * uAtt  ---- Paint Attribute:   (from GnuGetAtt)
+ *                   0 - normal client FG  normal BG
+ *                   1 - bright client FG  normal BG
+ *                   2 - normal client FG  bright BG
+ *                   3 - bright client FG  bright BG
+ *                   4 - normal border FG  normal BG
+ *                   5 - bright border FG  normal BG
+ *               other - high 8 bits used as attribute
+ *
+ * pszText - text to paint
+ *
+ * This function returns the count of characters written.
+ *
+ * The text may have sequences of the form \\@nn, where nn is a hex number
+ * specifying an attribute. for example "Press \\@01Enter\\@00 to continue"
+ * will make the word Enter print using the Hilite color.  To use a specific
+ * color attribure, use \\~nn
+ *
+ */
+UINT CCONV GnuPaint (PGW  pgw,
+                     INT  iRow,
+                     INT  iCol,
+                     UINT uJust,
+                     UINT uAtt,
+                     PSZ  pszText):1104 ;
+
+
+/*
+ * A printf like version of GnuPaint
+ *
+ */
+UINT CCONV GnuPaintStr (PGW   pgw,      // local window ?
+                        INT   iRow,     // 0 based row
+                        INT   iCol,     // 0 based col
+                        UINT  uJust,    // 0=lt 1=rt 2=ctr-Col 4=ctr-row 5=center-win
+                        UINT  uAtt,     // see GnuGetAtt table
+                        PSZ   psz):1105 ;
+
+/*
+ * A clipped version of GnuPaint
+ * uMaxLen is the max # of chars that will print
+ */
+UINT CCONV GnuPaint2(PGW  pgw,
+                     INT  iRow,
+                     INT  iCol,
+                     UINT uJust,
+                     UINT uAtt,
+                     PSZ  pszText,
+                     UINT uMaxLen):1106 ;
+
+
+/*
+ * multiline GnuPaint, word breaks text formats within box params
+ * \n in strings are handled correctly
+ *
+ * This fn differs from the other Paint functions in 2 ways:
+ *  1> The return value is the number of lines written
+ *  2> if pgw=0xFFFF this function does no painting (for getting line count)
+ */
+UINT CCONV GnuPaintBig (PGW   pgw,
+                         INT   iYPos,
+                         INT   iXPos,
+                         UINT  uYSize,
+                         UINT  uXSize,
+                         UINT  uJust,
+                         UINT  uAtt,
+                         PSZ   pszText):1107 ;
+
+
+/*
+ * repeats CHAR
+ */
+UINT CCONV GnuPaintNChar (PGW  pgw,
+                           INT  iRow,
+                           INT  iCol,
+                           UINT uJust,
+                           UINT uAtt,
+                           CHAR cChar,
+                           UINT uCount):1108 ;
+
+
+/*
+ * clears the window area (or screen if pgw=NULL), with the given
+ * attribute.  If bIncludeBorder=TRUE a border is painted too.
+ */
+void CCONV GnuClearWin (PGW pgw, UINT uAtt, BOOL bIncludeBorder):1109 ;
+
+
+/*
+ * paints the border around the window (or screen if pgw=NULL)
+ */
+void CCONV GnuPaintBorder (PGW pgw):1110 ;
+
+
+/************************** Settings ****************************************/
+
+
+/*
+ * moves the window to the new location
+ * returns TRUE if successful
+ */
+BOOL CCONV GnuMoveWin (PGW pgw, UINT uYPos, UINT uXPos):1111 ;
+
+
+
+
+/*
+ * GnuSetColor
+ * This function is used to set colors
+ * if pgw is NULL, the global color scheme is modified
+ * if pgw != NULL, the specific windows color scheme is modified
+ * the global color scheme is used as the default when creating new windows
+ *
+ * uType specifies which color component to modify
+ * uColor specifies what the new color should be for the given component
+ *
+ * uType also has several special values to perform special functions
+ *
+ *
+ *  uType  definition
+ *  -----------------------------
+ *  0      Normal BG
+ *  1      Bright BG
+ *  2      Normal Client FG
+ *  3      Bright Client FG
+ *  4      Normal Border FG
+ *  5      Bright Border FG
+ *  6      Message FG
+ *  7      Error FG
+ *  8      Shadow FG
+ *  9      Shadow BG
+ *
+ *  0x11   UserColor1
+ *  .      .
+ *  .      .
+ *  0x1F   UserColor15
+ *
+ *  99     Monochrome (0=off, or HiBYTE!=0, LowNibble=FG att on brt bg)
+ *
+ *  100    reset pgw colors to be same as global color set
+ *  200    reset global color set to be same as pgw
+ *  300    reset pgw or global set to be system startup color defaults
+ *  400    reset pgw or global set to be system startup mono  defaults
+ *  500    reset pgw or global set to be system startup defaults (colr or mono)
+ *  0xFFFF Reset colors to defaults:
+ *             if pgw <> NULL, works like uType=100
+ *             if pgw == NULL, works like uType=500
+ *
+ */
+UINT CCONV GnuSetColor (PGW pgw, UINT uType, UINT uColor):1112 ;
+
+UINT CCONV GnuGetColor (PGW pgw, UINT uType):1113 ;
+
+
+
+/*
+ *  uAttIdx  FG color           BG color
+ *  -------------------------------------------
+ *  0        Normal Client FG   Normal BG
+ *  1        Bright Client FG   Normal BG
+ *  2        Normal Client FG   Bright BG
+ *  3        Bright Client FG   Bright BG
+ *  4        Normal Border      Normal BG
+ *  5        Bright Border      Normal BG
+ *  6        Message FG         Normal BG
+ *  7        Message FG         Bright BG
+ *  8        Error FG           Normal BG
+ *  9        Error FG           Bright BG
+ *
+ *  15 (F)   Shadow FG          Shadow BG
+ *
+ *  0xXY     Y User FG          X User BG
+ *           (Y=1 - F)          (X=1 - F)
+ *
+ */
+UINT CCONV GnuGetAtt (PGW pgw, UINT uAttIDX):1114 ;
+
+
+
+/*
+ * This function sets the characters used for drawing window borders
+ *  and boxes. There is one global set of box characters.  In addition,
+ *  each window may have its own box CHAR set.  The global set is used by 
+ *  all windows which haven't had thier borders explicitly set.
+ * The character string pszBC should be 9 bytes long and contain in order:
+ *
+ *       TopL TopR BotL BotR HorizTop HorizBtm VertLeft VertRt ScrollMark.
+ *
+ * The default pszBC is "É»È¼ÍÍºº×"
+ *
+ * If pgw is NULL then the function will change the global set.  
+ * If pgw is NULL and pszBC is NULL the global CHAR set is reset to 
+ *  the default.
+ * If only pszBC is NULL the window will use the global CHAR set.
+ *
+ * Got that?
+ */
+UINT CCONV GnuSetBorderChars (PGW pgw, PSZ pszBC):1115 ;
+
+
+/*
+ * This paints a box with the default box chars
+ * This is used internally to draw the borders
+ * use NULL for pszBDRCHR unless you know what your doing
+ */
+UINT CCONV GnuDrawBox (UINT uYPos,    UINT uXPos,
+                        UINT uYSize,   UINT uXSize,
+                        PSZ pszBDRCHR, UINT uAtt):1116 ;
+
+
+/*
+ * Screen relative if pgw=NULL
+ * 0 based Top Left origin
+ * PMET stores max extents
+ * This is really a Scr fn with a Gnu param option
+ */
+void CCONV GnuMoveCursor (PGW pgw, UINT uY, UINT uX):1117 ;
+
+
+/*
+ * Returns the current position of the cursor
+ * 0 based Top Left origin
+ * Screen relative if pgw is NULL
+ */
+void CCONV GnuGetCursor (PGW pgw, 
+                         PUINT puY, 
+                         PUINT puX):1118 ;
+
+
+/************************ List Specific *************************************/
+
+
+/*
+ * calls the pGnuPaintProc to paint uLine. uLine is line index
+ * if list, or window line if static.
+ * paints all items (and entire window) if uLine = 0xFFFF
+ * returns TRUE if item is visible
+ */
+BOOL CCONV GnuPaintWin (PGW pgw, UINT uLine):1119 ;
+
+
+/*
+ * for list windows only.
+ * scrolls if necessary to ensure that uLine is in view port.
+ * returns TRUE if it had to scroll
+ */
+BOOL CCONV GnuMakeVisible (PGW pgw, UINT uLine):1120 ;
+
+
+/*
+ * if a list window, this scrolls so that uLine is top line.
+ * if a static window, no effect.
+ */
+BOOL CCONV GnuScrollTo  (PGW pgw, UINT uLine):1121 ;
+
+
+/*
+ * scrolls uLines up or down,
+ * any window type
+ * if list window, changes uScrollPos.
+ */
+void CCONV GnuScrollWin (PGW pgw, UINT uLines, BOOL bUp):1122 ;
+
+
+/*
+ * selects uLine. repaints new and old selection.
+ * if bOnScreen = TRUE, uses GnuMakeVisible.
+ * use uLine = 0xFFFF to deselect all
+ */
+BOOL CCONV GnuSelectLine (PGW pgw, UINT uLine, BOOL bOnScreen):1123 ;
+
+
+/****************************************************************************
+ **                                                                        **
+ *                           Gnu Utilities                                  *
+ **                                                                        **
+ ****************************************************************************/
+
+/*
+ * default processing of the movement keys
+ * for listwindows
+ * returns TRUE if the key was processed.
+ */
+BOOL CCONV GnuDoListKeys (PGW pgw, int cExtKey):1124 ;
+
+
+/*
+ * This fn creates a window to change the color mapping
+ * of the window pgw or the default colors if
+ * pgw is NULL
+ */
+BOOL CCONV GnuSelectColorsWindow2 (PPSZ ppszLabels, PUINT puColors):1126 ;
+
+
+/*
+ * This fn creates a window to modify the colors
+ * by directly modifying the VGA color registers
+ * Returns TRUE if the colors were changed
+ * Returns FALSE if the user aborts the winfow
+ */
+BOOL CCONV GnuModifyColorsWindow (void):1127 ;
+
+
+/*
+ * This fn creates a window where the user selects a file
+ * pszMatch contains the wildcard string to load from and
+ *  may have multiple filespecs separated by semi-colons.
+ * pszHeader is the string to display at the top of the window.
+ * pszWorkBuff is a working buffer that must be at least
+ *  4 * max entries bytes (entries are drives + dirs + files).
+ * On return pszFile will contain the filename and any relative path
+ *  needed to load the file.
+ * This fn returns 0 if the user aborted the window.
+ */
+UINT CCONV GnuFileWindow (PSZ pszFile, PSZ pszMatch, PSZ pszHeader, PSZ pszWorkBuff):1128 ;
+
+
+/*
+ * This is a simple message box that displays 2 lines of text,
+ * a header, and tells the user to press esc to continue.
+ */
+UINT CCONV GnuMsg (PSZ pszHeader, PSZ psz1, PSZ psz2):1129 ;
+
+
+/*
+ * This is another message box
+ * This can display a paragraph of data
+ * It will size itself accordingly
+ * You tell this box which chars to accept
+ * The CHAR entered is returned
+ */
+UINT CCONV GnuMsgBox (PSZ pszHeader, PSZ pszFooter, PSZ pszChars, PSZ pszText):1130 ;
+
+
+/*
+ * like above with uJust and uAtt added to preserve freshness
+ */
+UINT CCONV GnuMsgBox2 (PSZ  pszHeader,
+                        PSZ  pszFooter,
+                        PSZ  pszChars,
+                        UINT uYSize, // 0 = auto calculate
+                        UINT uXSize, // 0 = auto calculate
+                        UINT uJust,
+                        UINT uAtt,
+                        PSZ  pszText):1131 ;
+
+
+
+/*
+ *
+ *
+ */
+INT CCONV GnuComboBox (PPSZ ppsz, UINT uY, UINT uX, UINT uYSize, INT iStartSel):1132 ;
+
+
+
+/*
+ * Pops up a window and allows Hex Editing
+ * of the data in pszBuff
+ */
+UINT CCONV GnuHexEdit (PSZ pszBuff, UINT uOffset, UINT uLines):1133 ;
+
+
+/*
+ * This fn causes a gnu window to have a shimmer effect.
+ * pgw is the window to work on
+ * uAttrib is the color to use as the hilite
+ * uMax is the max number of calls before it repeats
+ */
+void CCONV WinShimmer (PGW pgw, BYTE cMask, BYTE cAttrib, INT uMax):1134 ;
+
+
+/*
+ * returns a UINT containing bit flags
+ * each used palette entry will have its bit set to 1
+ * use PGW=NULL   to look at the screen colors
+ * use PGW=-1     to look at the default colors
+ * use PGW=window to look at a windows colors
+ *
+ * uColorsToCheck determines how many of the colors to look at
+ * see GnuSetColor to see which colors.  Usually setting
+ * uColorsToCheck to 5 or to 9 is enough
+ *
+ */
+UINT CCONV WinUsedColorList (PGW pgw, UINT uColorsToCheck):1135 ;
+
+/****************************************************************************
+ **                                                                        **
+ *                           Gnu Internal fns                               *
+ **                                                                        **
+ ****************************************************************************/
+
+/*
+ * The following fns are mostly for internal use
+ * If you use these and give bad params, you deserve to crash and burn.
+ */
+UINT CCONV gnuDefPaintProc (PGW pgw, UINT uIndex, UINT uLine):1136 ;
+PSZ    CCONV gnuScreenDat (UINT uYPos, UINT uXPos, UINT uYSize, UINT uXSize):1137 ;
+BOOL   CCONV gnuDisplayDat (PGW pgw, BOOL bIncludeShadowArea):1138 ;
+void   CCONV gnuFreeDat (PGW pgw):1139 ;
+void   CCONV gnuSwapDat (PGW pgw, BOOL bShow):1140 ;
+void   CCONV gnuWinToScreen (PGW pgw, PINT piY, PINT piX):1141 ;
+void   CCONV gnuScreenToWin (PGW pgw, PINT piY, PINT piX):1142 ;
+void   CCONV gnuShowScrollPos (PGW pgw, UINT uNewLine, BOOL bShow):1143 ;
+void   CCONV gnuDrawShadow (PGW pgw):1144 ;
+BOOL   CCONV gnuFixScroll (PGW pgw):1145 ;
+void   CCONV gnuClientWinToScreen (PGW pgw, PINT piY, PINT piX):1146 ;
+void   CCONV gnuScreenToClientWin (PGW pgw, PINT piY, PINT piX):1147 ;
+PSZ    CCONV gnuGetBorderChars (void):1148 ;
+

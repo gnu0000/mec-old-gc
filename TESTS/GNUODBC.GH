@@ -1,0 +1,347 @@
+/***************************************************************************
+ *
+ * GC ODBC Interface library Header file
+ *
+ * 1997 Craig Fitzgerald
+ *
+ * This file conatins 2 ODBC API's
+ * The first API is very simple and should be sufficient for most purposes
+ * The Second API is the full extended MS c/c++ 2.0 ODBC api 
+ *
+ * You can use both of them at the same time, note that the structure
+ * handles used in the simple api contain the handles needed for the  
+ * second api.
+ *
+ ****************************************************************************
+ *
+ *  QUICK REF FUNCTION INDEX
+ *  ========================
+ * 
+ * SHORT ODBCInit     (void)                               
+ * SHORT ODBCTerm     (void)                               
+ * PCON  ODBCConnect  (pszDSN, pszID, pszPwd)           
+ * SHORT ODBCDisconnect (pcon)                         
+ * SHORT ODBCStmtInfo (pstm, iCol, iCmd, piRet, pszRet)
+ * PSTM  ODBCExec     (pcon, pszSQL, bMakeAllStrings)      
+ * SHORT ODBCCancel   (pstm)                             
+ * PVOID *ODBCGetRow  (pstm)                            
+ *                                                                         
+ ***************************************************************************/
+
+
+/***************************************************************************/
+/*                                                                         */
+/* Simple API                                                              */
+/*                                                                         */
+/***************************************************************************/
+
+
+typedef PVOID HENV;
+typedef PVOID HDBC;
+typedef PVOID HSTMT;
+typedef PVOID PTR;
+
+
+typedef struct
+   {
+   HDBC   hdbc;
+   } CON;
+typedef CON *PCON;
+
+typedef struct
+   {
+   HSTMT   hstmt;
+   PCON    pcon;
+   PSZ     pszSQL;
+   SHORT   iCols;
+   PSHORT  piTypes;
+   PVOID   *ppBind;
+   PLONG   plSizes;
+   } STM;
+typedef STM *PSTM;
+
+/* SQLColAttributes  and ODBCStmtInfo commands 
+ * -------------------------------------------
+ *
+ *
+ *
+ *
+ */
+#define SQL_COLUMN_COUNT                0
+#define SQL_COLUMN_NAME                 1
+#define SQL_COLUMN_TYPE                 2
+#define SQL_COLUMN_LENGTH               3
+#define SQL_COLUMN_PRECISION            4
+#define SQL_COLUMN_SCALE                5
+#define SQL_COLUMN_DISPLAY_SIZE         6
+#define SQL_COLUMN_NULLABLE             7
+#define SQL_COLUMN_UNSIGNED             8
+#define SQL_COLUMN_MONEY                9
+#define SQL_COLUMN_UPDATABLE            10
+#define SQL_COLUMN_AUTO_INCREMENT       11
+#define SQL_COLUMN_CASE_SENSITIVE       12
+#define SQL_COLUMN_SEARCHABLE           13
+#define SQL_COLUMN_TYPE_NAME            14
+#define SQL_COLUMN_TABLE_NAME           15
+#define SQL_COLUMN_OWNER_NAME           16
+#define SQL_COLUMN_QUALIFIER_NAME       17
+#define SQL_COLUMN_LABEL                18
+
+SHORT ODBCInit (void)                                                     : 2100;
+SHORT ODBCTerm (void)                                                     : 2101;
+PCON  ODBCConnect (PSZ pszDSN, PSZ pszID, PSZ pszPwd)                     : 2102;
+SHORT ODBCDisconnect (PCON pcon)                                          : 2103;
+SHORT ODBCStmtInfo (PSTM pstm, INT iCol, INT iCmd, PINT piRet, PSZ pszRet): 2104;
+PSTM  ODBCExec (PCON pcon, PSZ pszSQL, BOOL bMakeAllStrings)              : 2105;
+SHORT ODBCCancel (PSTM pstm)                                              : 2106;
+PVOID *ODBCGetRow (PSTM pstm)                                             : 2107;
+
+
+
+/***************************************************************************/
+/*                                                                         */
+/* Full ODBC api with extensions                                           */
+/*                                                                         */
+/***************************************************************************/
+
+
+/* RETCODEs */
+#define SQL_INVALID_HANDLE              (-2)
+#define SQL_ERROR                       (-1)
+#define SQL_SUCCESS                     0
+#define SQL_SUCCESS_WITH_INFO           1
+#define SQL_NO_DATA_FOUND               100
+
+/* Standard SQL datatypes, using ANSI type numbering */
+#define SQL_CHAR                        1
+#define SQL_NUMERIC                     2
+#define SQL_DECIMAL                     3
+#define SQL_INTEGER                     4
+#define SQL_SMALLINT                    5
+#define SQL_FLOAT                       6
+#define SQL_REAL                        7
+#define SQL_DOUBLE                      8
+#define SQL_VARCHAR                     12
+
+#define SQL_TYPE_NULL                   0
+#define SQL_TYPE_MIN     				SQL_BIT
+#define SQL_TYPE_MAX                    SQL_VARCHAR
+#define SQL_ALL_TYPES    				0
+
+/* C datatype to SQL datatype mapping      SQL types 
+										   ------------------- */
+#define SQL_C_CHAR    SQL_CHAR             /* CHAR, VARCHAR, DECIMAL, NUMERIC */
+#define SQL_C_LONG    SQL_INTEGER          /* INTEGER                      */
+#define SQL_C_SHORT   SQL_SMALLINT         /* SMALLINT                     */
+#define SQL_C_FLOAT   SQL_REAL             /* REAL                         */
+#define SQL_C_DOUBLE  SQL_DOUBLE           /* FLOAT, DOUBLE                */
+#define SQL_C_DEFAULT 99
+
+/* NULL status constants.  These are used in SQLColumns, SQLColAttributes,
+SQLDescribeCol, SQLDescribeParam, and SQLSpecialColumns to describe the
+nullablity of a column in a table. */
+#define SQL_NO_NULLS                    0
+#define SQL_NULLABLE                    1
+#define SQL_NULLABLE_UNKNOWN            2
+
+/* Special length values */
+#define SQL_NULL_DATA                   (-1)
+#define SQL_DATA_AT_EXEC                (-2)
+#define SQL_NTS                         (-3)
+
+/* SQLFreeStmt defines */
+#define SQL_CLOSE                       0
+#define SQL_DROP                        1
+#define SQL_UNBIND                      2
+#define SQL_RESET_PARAMS                3
+
+/* SQLTransact defines */
+#define SQL_COMMIT                      0
+#define SQL_ROLLBACK                    1
+
+/* SQLColAttributes defines */
+//#define SQL_COLUMN_COUNT                0
+//#define SQL_COLUMN_NAME                 1
+//#define SQL_COLUMN_TYPE                 2
+//#define SQL_COLUMN_LENGTH               3
+//#define SQL_COLUMN_PRECISION            4
+//#define SQL_COLUMN_SCALE                5
+//#define SQL_COLUMN_DISPLAY_SIZE         6
+//#define SQL_COLUMN_NULLABLE             7
+//#define SQL_COLUMN_UNSIGNED             8
+//#define SQL_COLUMN_MONEY                9
+//#define SQL_COLUMN_UPDATABLE            10
+//#define SQL_COLUMN_AUTO_INCREMENT       11
+//#define SQL_COLUMN_CASE_SENSITIVE       12
+//#define SQL_COLUMN_SEARCHABLE           13
+//#define SQL_COLUMN_TYPE_NAME            14
+//#define SQL_COLUMN_TABLE_NAME           15
+//#define SQL_COLUMN_OWNER_NAME           16
+//#define SQL_COLUMN_QUALIFIER_NAME       17
+//#define SQL_COLUMN_LABEL                18
+#define SQL_COLATT_OPT_MAX              SQL_COLUMN_LABEL
+#define SQL_COLUMN_DRIVER_START         1000
+
+#define SQL_COLATT_OPT_MIN              SQL_COLUMN_COUNT
+
+/* SQLColAttributes subdefines for SQL_COLUMN_UPDATABLE */
+#define SQL_ATTR_READONLY               0
+#define SQL_ATTR_WRITE                  1
+#define SQL_ATTR_READWRITE_UNKNOWN      2
+
+/* SQLColAttributes subdefines for SQL_COLUMN_SEARCHABLE */
+/* These are also used by SQLGetInfo                     */
+#define SQL_UNSEARCHABLE                0
+#define SQL_LIKE_ONLY                   1
+#define SQL_ALL_EXCEPT_LIKE             2
+#define SQL_SEARCHABLE                  3
+
+/* SQLError defines */
+#define SQL_NULL_HENV                   0
+#define SQL_NULL_HDBC                   0
+#define SQL_NULL_HSTMT                  0
+
+
+typedef struct tagDATE_STRUCT
+   {
+   SHORT    year;
+   SHORT   month;
+   SHORT   day;
+   } DATE_STRUCT;
+
+typedef struct tagTIME_STRUCT
+   {
+   SHORT   hour;
+   SHORT   minute;
+   SHORT   second;
+   } TIME_STRUCT;
+
+typedef struct tagTIMESTAMP_STRUCT
+   {
+   SHORT    year;
+   SHORT   month;
+   SHORT   day;
+   SHORT   hour;
+   SHORT   minute;
+   SHORT   second;
+   INT    fraction;
+   } TIMESTAMP_STRUCT;
+
+
+SHORT SQLAllocConnect (HENV henv, HDBC *phdbc)                                : 2000;
+SHORT SQLAllocEnv (HENV *phenv)                                               : 2001;
+SHORT SQLAllocStmt (HDBC hdbc, HSTMT *phstmt)                                 : 2002;
+SHORT SQLBindCol (HSTMT hstmt, SHORT icol, SHORT fCType, PTR rgbValue, 
+                  INT cbValueMax, INT *pcbValue)                              : 2003;
+SHORT SQLCancel (HSTMT hstmt)                                                 : 2004;
+SHORT SQLColAttributes (HSTMT hstmt, SHORT icol, SHORT fDescType, PTR rgbDesc,
+                        SHORT cbDescMax, SHORT *pcbDesc, INT *pfDesc)         : 2005;
+SHORT SQLConnect (HDBC hdbc, PSZ szDSN, SHORT cbDSN, PSZ szUID, 
+                  SHORT cbUID, PSZ szAuthStr, SHORT cbAuthStr)              : 2006;
+SHORT SQLDescribeCol (HSTMT hstmt, SHORT icol, PSZ szColName, 
+                      SHORT cbColNameMax, SHORT *pcbColName, 
+                      SHORT *pfSqlType, INT *pcbColDef, SHORT *pibScale, 
+                      SHORT *pfNullable)                                      : 2007;
+SHORT SQLDisconnect (HDBC hdbc)                                               : 2008;
+SHORT SQLError (HENV henv, HDBC hdbc, HSTMT hstmt, PSZ szSqlState, 
+                INT *pfNativeError, PSZ szErrorMsg, SHORT cbErrorMsgMax, 
+                SHORT *pcbErrorMsg)                                           : 2009;
+SHORT SQLExecDirect (HSTMT hstmt, PSZ szSqlStr, INT cbSqlStr)               : 2010;
+SHORT SQLExecute (HSTMT hstmt)                                                : 2011;
+SHORT SQLFetch (HSTMT hstmt)                                                  : 2012;
+SHORT SQLFreeConnect (HDBC hdbc)                                              : 2013;
+SHORT SQLFreeEnv (HENV henv)                                                  : 2014;
+SHORT SQLFreeStmt (HSTMT hstmt, SHORT fOption)                                : 2015;
+SHORT SQLGetCursorName (HSTMT hstmt, PSZ szCursor, SHORT cbCursorMax, 
+                        SHORT *pcbCursor)                                     : 2016;
+SHORT SQLNumResultCols (HSTMT hstmt, SHORT *pccol)                            : 2017;
+SHORT SQLPrepare (HSTMT hstmt, PSZ szSqlStr, INT cbSqlStr)                  : 2018;
+SHORT SQLRowCount (HSTMT hstmt, INT *pcrow)                                   : 2019;
+SHORT SQLSetCursorName (HSTMT hstmt, PSZ szCursor, SHORT cbCursor)          : 2020;
+SHORT SQLTransact (HENV henv, HDBC hdbc, SHORT fType)                         : 2021;
+SHORT SQLSetParam (HSTMT hstmt, SHORT ipar, SHORT fCType, SHORT fSqlType, 
+                   INT cbParamDef, SHORT ibScale, PTR rgbValue, INT *pcbValue): 2022;
+SHORT SQLColumns (HSTMT hstmt, PSZ szCatalogName, SHORT cbCatalogName, 
+                  PSZ szSchemaName, SHORT cbSchemaName, PSZ szTableName, 
+                  SHORT cbTableName, PSZ szColumnName, SHORT cbColumnName)  : 2023;
+SHORT SQLGetConnectOption (HDBC hdbc, SHORT fOption, PTR pvParam)             : 2024;
+SHORT SQLGetData (HSTMT hstmt, SHORT icol, SHORT fCType, PTR rgbValue, 
+                  INT cbValueMax, INT *pcbValue)                              : 2025;
+SHORT SQLGetFunctions (HDBC hdbc, SHORT fFunction, SHORT *pfExists)           : 2026;
+SHORT SQLGetInfo (HDBC hdbc, SHORT fInfoType, PTR rgbInfoValue, 
+                  SHORT cbInfoValueMax, SHORT *pcbInfoValue)                  : 2027;
+SHORT SQLGetStmtOption (HSTMT hstmt, SHORT fOption, PTR pvParam)              : 2028;
+SHORT SQLGetTypeInfo (HSTMT hstmt, SHORT fSqlType)                            : 2029;
+SHORT SQLParamData (HSTMT hstmt, PTR *prgbValue)                              : 2030;
+SHORT SQLPutData (HSTMT hstmt, PTR rgbValue, INT cbValue)                     : 2031;
+SHORT SQLSetConnectOption (HDBC hdbc, SHORT fOption, INT vParam)              : 2032;
+SHORT SQLSetStmtOption (HSTMT hstmt, SHORT fOption, INT vParam)               : 2033;
+SHORT SQLSpecialColumns (HSTMT hstmt, SHORT fColType, PSZ szCatalogName, 
+                         SHORT cbCatalogName, PSZ szSchemaName, 
+                         SHORT cbSchemaName, PSZ szTableName, 
+                         SHORT cbTableName, SHORT fScope, SHORT fNullable)    : 2034;
+SHORT SQLStatistics (HSTMT hstmt, PSZ szCatalogName, SHORT cbCatalogName, 
+                     PSZ szSchemaName, SHORT cbSchemaName, 
+                     PSZ szTableName, SHORT cbTableName, SHORT fUnique, 
+                     SHORT fAccuracy)                                         : 2035;
+SHORT SQLTables (HSTMT hstmt, PSZ szCatalogName, SHORT cbCatalogName, 
+                     PSZ szSchemaName, SHORT cbSchemaName, 
+                     PSZ szTableName, SHORT cbTableName, PSZ szTableType, 
+                     SHORT cbTableType)                                       : 2036;
+SHORT SQLDataSources (HENV henv, SHORT fDirection, PSZ szDSN, 
+                      SHORT cbDSNMax, SHORT *pcbDSN, PSZ szDescription, 
+                      SHORT cbDescriptionMax, SHORT *pcbDescription)          : 2037;
+SHORT SQLSetScrollOptions (HSTMT hstmt, SHORT fConcurrency, INT crowKeyset, 
+                           SHORT crowRowset)                                  : 2038;
+SHORT SQLDriverConnect (HDBC hdbc, PVOID hwnd, PSZ szConnStrIn, 
+                        SHORT cbConnStrIn, PSZ szConnStrOut, 
+                        SHORT cbConnStrOutMax, SHORT *pcbConnStrOut, 
+                        SHORT fDriverCompletion)                              : 2039;
+SHORT SQLBrowseConnect (HDBC hdbc, PSZ szConnStrIn, SHORT cbConnStrIn, 
+                        PSZ szConnStrOut, SHORT cbConnStrOutMax, 
+                        SHORT *pcbConnStrOut)                                 : 2040;
+SHORT SQLColumnPrivileges (HSTMT hstmt, PSZ szCatalogName, 
+                           SHORT cbCatalogName, PSZ szSchemaName, 
+                           SHORT cbSchemaName, PSZ szTableName, 
+                           SHORT cbTableName, PSZ szColumnName, 
+                           SHORT cbColumnName)                                : 2041;
+SHORT SQLDescribeParam (HSTMT hstmt, SHORT ipar, SHORT *pfSqlType, 
+                        INT *pcbParamDef, SHORT *pibScale, SHORT *pfNullable) : 2042;
+SHORT SQLExtendedFetch (HSTMT hstmt, SHORT fFetchType, INT irow, 
+                        INT *pcrow, SHORT *rgfRowStatus)                      : 2043;
+SHORT SQLForeignKeys (HSTMT hstmt, PSZ szPkCatalogName, 
+                      SHORT cbPkCatalogName, PSZ szPkSchemaName, 
+                      SHORT cbPkSchemaName, PSZ szPkTableName, 
+                      SHORT cbPkTableName, PSZ szFkCatalogName, 
+                      SHORT cbFkCatalogName, PSZ szFkSchemaName, 
+                      SHORT cbFkSchemaName, PSZ szFkTableName, 
+                      SHORT cbFkTableName)                                    : 2044;
+SHORT SQLMoreResults (HSTMT hstmt)                                            : 2045;
+SHORT SQLNativeSql (HDBC hdbc, PSZ szSqlStrIn, INT cbSqlStrIn, 
+                    PSZ szSqlStr, INT cbSqlStrMax, INT *pcbSqlStr)          : 2046;
+SHORT SQLNumParams (HSTMT hstmt, SHORT *pcpar)                                : 2047;
+SHORT SQLParamOptions (HSTMT hstmt, INT crow, INT *pirow)                     : 2048;
+SHORT SQLPrimaryKeys (HSTMT hstmt, PSZ szCatalogName, SHORT cbCatalogName, 
+                      PSZ szSchemaName, SHORT cbSchemaName, 
+                      PSZ szTableName, SHORT cbTableName)                   : 2049;
+SHORT SQLProcedureColumns (HSTMT hstmt, PSZ szCatalogName, 
+                           SHORT cbCatalogName, PSZ szSchemaName, 
+                           SHORT cbSchemaName, PSZ szProcName, 
+                           SHORT cbProcName, PSZ szColumnName, 
+                           SHORT cbColumnName)                                : 2050;
+SHORT SQLProcedures (HSTMT hstmt, PSZ szCatalogName, SHORT cbCatalogName, 
+                     PSZ szSchemaName, SHORT cbSchemaName, 
+                     PSZ szProcName, SHORT cbProcName)                      : 2051;
+SHORT SQLSetPos (HSTMT hstmt, SHORT irow, SHORT fOption, SHORT fLock)         : 2052;
+SHORT SQLTablePrivileges (HSTMT hstmt, PSZ szCatalogName, 
+                          SHORT cbCatalogName, PSZ szSchemaName, 
+                          SHORT cbSchemaName, PSZ szTableName, 
+                          SHORT cbTableName)                                  : 2053;
+SHORT SQLDrivers (HENV henv, SHORT fDirection, PSZ szDriverDesc, 
+                  SHORT cbDriverDescMax, SHORT *pcbDriverDesc, 
+                  PSZ szDriverAttributes, SHORT cbDrvrAttrMax, 
+                  SHORT *pcbDrvrAttr)                                         : 2054;
+SHORT SQLBindParameter (HSTMT hstmt, SHORT ipar, SHORT fParamType, 
+                        SHORT fCType, SHORT fSqlType, INT cbColDef, 
+                        SHORT ibScale, PTR rgbValue, INT cbValueMax, 
+                        INT *pcbValue)                                        : 2055;

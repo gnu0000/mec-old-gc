@@ -1,0 +1,216 @@
+/*
+ *
+ * tstruct.gc
+ * Monday, 3/2/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+#define THISFILE "TSTRUCT.gc"
+
+
+typedef struct _node
+   {
+   char c;
+
+   struct _node *left;
+   struct _node *right;
+   } NODE;
+typedef NODE *PNODE;
+
+
+/***************************************************************************/
+
+typedef struct
+   {
+   int i;
+   int j;
+   int k;
+   } ST1;
+typedef ST1 *PST1;
+
+void PrintStruct (PST1 pst1)
+   {
+   printf ("st1.i = %d\n", pst1->i);
+   printf ("st1.j = %d\n", pst1->j);
+   printf ("st1.k = %d\n", pst1->k);
+   }
+
+void PrintStruct2 (ST1 st1)
+   {
+   printf ("st1.i = %d\n", st1.i);
+   printf ("st1.j = %d\n", st1.j);
+   printf ("st1.k = %d\n", st1.k);
+   }
+
+int StructTest0 (void)
+   {
+   ST1 st0;
+   ST1 st;
+   ST1 st1;
+
+   st.i = 11;
+   st.j = 22;
+   st.k = 33;
+
+   DumpMem  ((PVOID)&st, 12);
+   printf ("----------\n");
+   DumpMem  ((PVOID)&st, 12);
+   PrintStruct (&st);
+   DumpMem  ((PVOID)&st, 12);
+
+   PrintStruct2 (st);
+   printf ("----------\n");
+   DumpMem  ((PVOID)&st, 12);
+   PrintStruct (&st);
+   printf ("----------\n");
+
+   printf ("----------------------\n");
+   return 0;
+   }
+
+/***************************************************************************/
+
+typedef struct _boog
+   {
+   char  c;
+   int   i1, i2, i3, i4, i5;
+   float f1, f2, f3, f4, f5;
+
+   struct _boog *left;
+   struct _boog *right;
+   } BOOG;
+typedef BOOG *PBOOG;
+
+
+typedef struct _combo
+   {
+   char  c;
+   NODE  n;
+   BOOG  b;
+   } COMBO;
+
+
+char c = 'G';
+
+int SimpleTest (void)
+   {
+   NODE  n;
+   BOOG  b;
+   COMBO o;
+   char  c;
+
+   n.c = 'N';
+   b.c = 'B';
+   c   = 'L';
+
+   o.c =   'A';
+   o.n.c = 'B'; 
+   o.b.c = 'C'; 
+
+   printf ("n.c   = %c\n", n.c);
+   printf ("b.c   = %c\n", b.c);
+   printf ("c     = %c\n", c);
+
+   printf ("o.c   = %c\n", o.c  );
+   printf ("o.n.c = %c\n", o.n.c);
+   printf ("o.b.c = %c\n", o.b.c);
+   printf ("----------------------\n");
+   }
+
+/***************************************************************************/
+/***************************************************************************/
+
+
+typedef struct
+   {
+   int a;
+   int b;
+   int c;
+   int d;
+   } AAA;
+
+int StructArray (void)
+   {
+   AAA b[50];
+   int i;
+
+   for (i=0; i<50; i++)
+      {
+      b[i].a = i*4;
+      b[i].b = i*4+1;
+      b[i].c = i*4+2;
+      b[i].d = i*4+3;
+      }
+
+   for (i=0; i<50; i++)
+      printf ("%d %d %d %d\n", b[i].a, b[i].b, b[i].c, b[i].d);
+
+   printf ("----------------------\n");
+   }
+
+/***************************************************************************/
+/***************************************************************************/
+
+
+
+PNODE AddNode (PNODE pTree, char c)
+   {
+   if (!pTree)
+      {
+      printf (".");
+      pTree = (PNODE) calloc (1, sizeof (NODE));
+      pTree->left = pTree->right = (PNODE)0;
+      pTree->c = c;
+      return pTree;
+      }
+   if (c < pTree->c)
+      pTree->left = AddNode (pTree->left, c);
+   else
+      pTree->right = AddNode (pTree->right, c);
+   return pTree;
+   }
+
+void PrintTree (PNODE pTree)
+   {
+   if (!pTree)
+      return;
+
+   PrintTree (pTree->left);
+   printf ("%c", pTree->c);
+   PrintTree (pTree->right);
+   }
+
+
+int TreeTest (void)
+   {
+   PNODE pTree = (PNODE)0;
+   char  c;
+   void  *fpIn;
+   int   i;
+
+   printf ("Building node tree with chars from %s...\n", THISFILE);
+   fpIn = fopen (THISFILE, "rt");
+   for (i=0; i<160 && fread (&c, 1, 1, fpIn) == 1; i++)
+      if (c != ' ' && c != '\n')
+         pTree = AddNode (pTree, c);
+   fclose (fpIn);
+
+   printf ("\n");
+   PrintTree (pTree);
+   }
+
+/***************************************************************************/
+/***************************************************************************/
+
+int main (int argc, char *argv[])
+   {
+   StructTest0 ();
+   SimpleTest ();
+   StructArray ();
+   TreeTest ();
+   
+   return 0;
+   }
+

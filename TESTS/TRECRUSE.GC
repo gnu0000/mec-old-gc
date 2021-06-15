@@ -1,0 +1,51 @@
+/*
+ *
+ * trecruse.gc
+ * Monday, 3/2/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+short SFactorial (short i)
+   {
+   if (!i)
+      return 1;
+   return i * SFactorial (i-1);
+   }
+
+long  LFactorial (long  i)
+   {
+   if (!i)
+      return 1;
+   return i * LFactorial (i-1);
+   }
+
+float FFactorial (float i)
+   {
+   if (i == 0.0)
+      return 1;
+   return i * FFactorial (i-1.0);
+   }
+
+
+int RecursionTest (void)
+   {
+   int i;
+
+   for (i=1; i<9; i++)
+      printf ("<short !%d = %d\n", i, SFactorial (i));
+   for (i=1; i<9; i++)
+      printf ("<long !%d = %ld\n", i, LFactorial (i));
+   for (i=1; i<9; i++)
+      printf ("<float !%d = %lf\n", i, FFactorial (i));
+   }
+
+int main (int argc, char *argv[])
+   {
+   RecursionTest ();
+   
+   return 0;
+   }
+

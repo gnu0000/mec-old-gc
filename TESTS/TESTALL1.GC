@@ -1,0 +1,459 @@
+/*
+ *
+ * testall1.gc
+ * Monday, 3/2/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+#define THISFILE "testall1.gc"
+
+/***************************************************************************/
+/*                                                                         */
+/* Basic Tests                                                             */
+/*                                                                         */
+/***************************************************************************/
+
+int VariableTest (void)
+   {
+   }
+
+int LoopTest (void)
+   {
+   int i, j;
+
+   printf ("Printing alpha chars 65 thru 89:\n");
+   for (i=65; i<90; i++)
+      printf ("%c ", (char)i);
+   printf ("\n");
+
+   printf ("Printing alpha chars 89 thru 65:\n");
+   for (i=89; i>64; i--)
+      printf ("%c ", (char)i);
+   printf ("\n");
+
+   printf ("Printing a triangle\n");
+   for (i=0; i<10; i++)
+      {
+      for (j=10-i; j<10; j++)
+         printf (" ");
+      for (j=i; j<10; j++)
+         printf ("*");
+      printf ("\n");
+      }
+   }
+
+
+
+typedef int FRED;
+typedef int *SALLY;
+typedef int JON[20];
+
+int TypedefTest (void)
+   {
+   FRED  i;
+   SALLY pi;
+   JON   ai;
+
+   i = 10;
+   pi = &i;
+
+   *pi = 20;
+
+   printf ("i=%d\n", i);
+
+   for (i=0; i<20; i++)
+      ai[i] = 20-i;
+
+   for (i=0; i<20; i++)
+      printf ("ai[%d]=%d\n", i, ai[i]);
+
+   return 0;
+   }
+
+/***************************************************************************/
+/*                                                                         */
+/* String                                                                  */
+/*                                                                         */
+/***************************************************************************/
+
+/***************************************************************************/
+/*                                                                         */
+/* Pointer                                                                 */
+/*                                                                         */
+/***************************************************************************/
+
+int   iG;
+char  cG;
+char  szG[16];
+long  lG;
+float fG;
+
+int PointerTest (int i)
+   {
+   int   iL;
+   char  cL; 
+   char  szL[16];
+   long  lL;
+   float fL;
+
+   int   *piL,  *piG;
+   char  *pcL,  *pcG;
+   char  *pszL, *pszG;
+   long  *plL,  *plG;
+   float *pfL,  *pfG;
+
+
+   piL  = &iL;
+   pcL  = &cL;
+   pszL = szL;
+   plL  = &lL;
+   pfL  = &fL;
+
+   piG  = &iG;
+   pcG  = &cG;
+   pszG = szG;
+   plG  = &lG;
+   pfG  = &fG;
+
+   iL  = 123;
+   cL  = 'A';
+   strcpy (szL, "Hello L");
+   lL  = 123456;
+   fL  = 123.456;
+
+   iG  = 321;
+   cG  = 'B';
+   strcpy (szG, "Hello G");
+   lG  = 654321;
+   fG  = 654.321;
+
+   printf ("local  should print (123)(A)(123456)(Hello L)(123.456)\n");
+   printf ("global should print (321)(B)(654321)(Hello G)(654.321)\n");
+   printf ("------------------------------------------------------\n");
+
+   printf ("local  direct: int(%4d) char(%c) long(%6ld) str(%s) float (%lf)\n", iL, cL, lL, szL, fL);
+   printf ("local   deref: int(%4d) char(%c) long(%6ld) str(%s) float (%lf)\n", *piL, *pcL, *plL, pszL, *pfL);
+   printf ("global direct: int(%4d) char(%c) long(%6ld) str(%s) float (%lf)\n", iG, cG, lG, szG, fG);
+   printf ("global  deref: int(%4d) char(%c) long(%6ld) str(%s) float (%lf)\n", *piG, *pcG, *plG, pszG, *pfG);
+   }
+
+
+/***************************************************************************/
+/*                                                                         */
+/* Memory                                                                  */
+/*                                                                         */
+/***************************************************************************/
+
+/***************************************************************************/
+/*                                                                         */
+/* Array                                                                   */
+/*                                                                         */
+/***************************************************************************/
+
+/***************************************************************************/
+/*                                                                         */
+/* File                                                                    */
+/*                                                                         */
+/***************************************************************************/
+
+/***************************************************************************/
+/*                                                                         */
+/* Misc                                                                    */
+/*                                                                         */
+/***************************************************************************/
+
+short SFactorial (short i)
+   {
+   if (!i)
+      return 1;
+   return i * SFactorial (i-1);
+   }
+
+long  LFactorial (long  i)
+   {
+   if (!i)
+      return 1;
+   return i * LFactorial (i-1);
+   }
+
+float FFactorial (float i)
+   {
+   if (i == 0.0)
+      return 1;
+   return i * FFactorial (i-1.0);
+   }
+
+
+int RecursionTest (void)
+   {
+   int i;
+
+   for (i=1; i<9; i++)
+      printf ("<short !%d = %d\n", i, SFactorial (i));
+   for (i=1; i<9; i++)
+      printf ("<long !%d = %ld\n", i, LFactorial (i));
+   for (i=1; i<9; i++)
+      printf ("<float !%d = %lf\n", i, FFactorial (i));
+   }
+
+
+int ptest1 (int a, int b, int c)
+   {
+   printf ("   param vals: a=%d, b=%d, c=%d\n", a, b, c);
+   }
+
+int ptest2 (void)
+   {
+   int i;
+
+   printf ("Params passed in: %d\n", ParmCount ());
+   for (i=0; i<ParmCount (); i++)
+      {
+      printf ("Parm index: %d, type: %d, word value: %d\n", 
+              i, ParmType(i), ParmWord (i));
+      }
+   }
+
+int ParameterTest (void)
+   {
+   printf ("passing 1 param (1) to a fn with 3 params:\n");
+   ptest1 (1);
+   printf ("passing 3 params (1,2,3) to a fn with 3 params:\n");
+   ptest1 (1, 2, 3);
+   printf ("passing 6 params (1-6) to a fn with 3 params:\n");
+   ptest1 (1, 2, 3, 4, 5, 6);
+
+   printf ("passing params (1, 2, 3, 4, 5, 6) to parmtest:\n");
+   ptest2 (1, 2, 3, 4, 5, 6);
+   }
+
+int SystemCallTest (void)
+   {
+   }
+
+
+int fn3 (int a, int b, int c)
+   {
+   return a+b+c;
+   }
+
+int SpeedTest (void)
+   {
+   long t1, t2, *pt;
+   int  i, j=0;
+
+   printf ("calling a fn 50000 times...");
+   t1 = time (pt);
+   for (i=0; i<50000; i++)
+      {
+      j += fn3 (i, j, j-i);
+      }
+   t2 = time (pt);
+   printf ("\nElapsed time: %ld seconds\n", t2-t1);
+   }
+
+
+/***************************************************************************/
+
+typedef struct _node
+   {
+   char c;
+
+   struct _node *left;
+   struct _node *right;
+   } NODE;
+typedef NODE *PNODE;
+
+
+PNODE AddNode (PNODE pTree, char c)
+   {
+   if (!pTree)
+      {
+      printf (".");
+      pTree = (PNODE) calloc (1, sizeof (NODE));
+      pTree->left = pTree->right = (PNODE)0;
+      pTree->c = c;
+      return pTree;
+      }
+   if (c < pTree->c)
+      pTree->left = AddNode (pTree->left, c);
+   else
+      pTree->right = AddNode (pTree->right, c);
+   return pTree;
+   }
+
+void PrintTree (PNODE pTree)
+   {
+   if (!pTree)
+      return;
+
+   PrintTree (pTree->left);
+   printf ("%c", pTree->c);
+   PrintTree (pTree->right);
+   }
+
+
+int TreeTest (void)
+   {
+   PNODE pTree = (PNODE)0;
+   char  c;
+   void  *fpIn;
+   int   i;
+
+   printf ("Building node tree with chars from %s...\n", THISFILE);
+   fpIn = fopen (THISFILE, "rt");
+   for (i=0; i<160 && fread (&c, 1, 1, fpIn) == 1; i++)
+      if (c != ' ' && c != '\n')
+         pTree = AddNode (pTree, c);
+   fclose (fpIn);
+
+   printf ("\n");
+   PrintTree (pTree);
+   }
+
+/***************************************************************************/
+/*                                                                         */
+/*                                                                         */
+/*                                                                         */
+/***************************************************************************/
+
+int Menu (PSZ *ppszList)
+   {
+   int i, c;
+
+   while (TRUE)
+      {
+      for (i=0; ppszList[i]; i++)
+         printf ("%d ... %s\n", i, ppszList[i]);
+      printf ("<esc> to exit menu.\n", i, ppszList[i]);
+
+      for (c=0; c < '0' || c-'0' > i; )
+         {
+         c = k_getch ();
+         if (!c || c == 0x1b)
+            return 0;
+         }
+      printf ("----------------\n%s\n----------------\n", ppszList[c-'0']);
+      Call (ppszList[c-'0']);
+      }
+   }
+
+/***************************************************************************/
+
+PSZ ppszBasic[] =
+   {
+   "VariableTest",
+   "LoopTest",
+   "TypedefTest",
+   NULL
+   };
+
+int BasicTests (void)
+   {
+   Menu (ppszBasic);
+   }
+
+
+
+PSZ ppszString[] =
+   {
+   "",
+   NULL
+   };
+
+int StringTests (void)
+   {
+   Menu (ppszString);
+   }
+
+
+
+PSZ ppszPointer[] =
+   {
+   "PointerTest",
+   NULL
+   };
+
+int PointerTests (void)
+   {
+   Menu (ppszPointer);
+   }
+
+
+
+PSZ ppszMemory[] =
+   {
+   "",
+   NULL
+   };
+
+int MemoryTests (void)
+   {
+   Menu (ppszMemory);
+   }
+
+
+
+PSZ ppszArray[] =
+   {
+   "",
+   NULL
+   };
+
+int ArrayTests (void)
+   {
+   Menu (ppszArray);
+   }
+
+
+
+PSZ ppszFile[] =
+   {
+   "",
+   NULL
+   };
+
+int FileTests (void)
+   {
+   Menu (ppszFile);
+   }
+
+
+
+
+PSZ ppszMisc[] =
+   {
+   "RecursionTest",
+   "ParameterTest",
+   "SystemCallTest",
+   "SpeedTest",
+   "TreeTest",
+   NULL
+   };
+
+int MiscTests (void)
+   {
+   Menu (ppszMisc);
+   }
+
+
+
+PSZ ppszMain[] = 
+   {
+   "BasicTests",
+   "StringTests",
+   "PointerTests",             
+   "MemoryTests",             
+   "ArrayTests",             
+   "FileTests",
+   "MiscTests",
+   NULL
+   };
+
+int main (int argc, char *argv[])
+   {
+   Menu (ppszMain);
+   }
+

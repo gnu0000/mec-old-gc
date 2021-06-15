@@ -1,0 +1,59 @@
+/*
+ *
+ * 51.gc
+ * Tuesday, 3/18/1997.
+ *
+ */
+
+#include <gnusys.gh>
+
+void Reverse (char *sz)
+   {
+   char c;
+   int i;
+
+   c = *sz;
+   i = c;
+
+//   printf ("[%d]", (int)*sz);
+//   printf ("[%d]", i);
+
+
+   if (!*sz)
+      return;
+
+   Reverse (sz + 1);
+   printf ("%c", *sz);
+   }
+
+void Test (char *sz)
+   {
+   int i, j;
+
+   for (i=0; sz[i]; i++)
+      {
+      j = sz[i];
+      printf ("[%c](%d)", sz[i], j);
+      }
+   }
+
+
+
+int main (int argc, char *argv[])
+   {
+   int i;
+
+   printf ("argc=%d\n", argc);
+
+   for (i=0; i<argc; i++)
+      {
+      printf ("Param#%2.2d: ", i);
+      printf ("Forward: %s  Backward: ", argv[i]);
+      Reverse (argv[i]);
+//Test (argv[i]);
+      printf ("\n");
+      }
+   printf ("done.\n");
+   return 0;
+   }
+

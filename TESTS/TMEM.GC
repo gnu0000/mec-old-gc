@@ -1,0 +1,25 @@
+#include <gnusys.gh>
+
+int main (int argc, char *argv[])
+   {
+   int  i, uMallocSize;
+   long lMallocSize;
+   PSZ  psz;
+
+   if (argc > 1)
+      uMallocSize = atoi (argv[1]);
+   else
+      uMallocSize = 8192;
+
+   printf ("MallocSize = %d\n", uMallocSize);
+
+   for (i=0; i<1024; i++)
+      {
+      psz = (PSZ)malloc (uMallocSize);
+      if (!psz)
+         break;
+      }
+   lMallocSize = (long)i * (long)uMallocSize;
+
+   printf ("total Malloced = %ld  [i=%d]\n", lMallocSize, i);
+   }

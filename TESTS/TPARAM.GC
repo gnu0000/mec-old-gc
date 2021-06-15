@@ -1,0 +1,47 @@
+/*
+ *
+ * tparam.gc
+ * Monday, 3/2/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+int ptest1 (int a, int b, int c)
+   {
+   printf ("   param vals: a=%d, b=%d, c=%d\n", a, b, c);
+   }
+
+int ptest2 (void)
+   {
+   int i;
+
+   printf ("Params passed in: %d\n", ParmCount ());
+   for (i=0; i<ParmCount (); i++)
+      {
+      printf ("Parm index: %d, type: %d, word value: %d\n", 
+              i, ParmType(i), ParmWord (i));
+      }
+   }
+
+int ParameterTest (void)
+   {
+   printf ("passing 1 param (1) to a fn with 3 params:\n");
+   ptest1 (1);
+   printf ("passing 3 params (1,2,3) to a fn with 3 params:\n");
+   ptest1 (1, 2, 3);
+   printf ("passing 6 params (1-6) to a fn with 3 params:\n");
+   ptest1 (1, 2, 3, 4, 5, 6);
+
+   printf ("passing params (1, 2, 3, 4, 5, 6) to parmtest:\n");
+   ptest2 (1, 2, 3, 4, 5, 6);
+   }
+
+int main (int argc, char *argv[])
+   {
+   ParameterTest ();
+   
+   return 0;
+   }
+

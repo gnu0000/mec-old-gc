@@ -1,0 +1,24 @@
+/*
+ *
+ * win1.gc
+ * Monday, 4/7/1997.
+ *
+ */
+
+#include <gnusys.gh>
+#include <gnuscr.gh>
+#include <gnuwin.gh>
+
+
+int main (int argc, char *argv[])
+   {
+   PMET pm;
+   INT  bOK;
+
+   pm  = ScrInitMetrics ();
+   ScrSetIntenseBkg (TRUE);
+   bOK = GnuModifyColorsWindow ();
+
+   return 0;
+   }
+

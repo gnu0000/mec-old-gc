@@ -1,0 +1,33 @@
+/*
+ *
+ * t4.gc
+ * Friday, 3/6/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+int main (int argc, char *argv[])
+   {
+   char c;
+   int i;
+   long l;
+
+   c = i;
+   c = l;
+   i = c;
+   i = l;
+   l = c;
+   l = i;
+
+   c = (char)i;
+   c = (char)l;
+   i = (int)c;
+   i = (int)l;
+   l = (long)c;
+   l = (long)i;
+
+   return 0;
+   }
+

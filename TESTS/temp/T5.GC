@@ -1,0 +1,26 @@
+/*
+ *
+ * t5.gc
+ * Friday, 3/6/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+int main (int argc, char *argv[])
+   {
+   int i, j;
+   char sz[64];
+
+   strcpy (sz, "Hello World");
+
+   for (i=0; sz[i]; i++)
+      {
+      j = sz[i];
+      printf ("%d ", j);
+      }
+   printf ("\n");
+   return 0;
+   }
+

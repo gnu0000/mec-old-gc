@@ -1,0 +1,14 @@
+#include <gnusys.gh>
+
+int main (int argc, char *argv[])
+   {
+	int c;
+
+//	for (;;)								//<- problem 1
+	while (TRUE)
+		{
+	   c = k_getch ();				//<- problem 2
+		printf ("c = %d\n");
+		}
+   }
+

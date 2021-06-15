@@ -1,0 +1,22 @@
+/*
+ *
+ * t_arg.gc
+ * Monday, 3/2/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+int main (int argc, char *argv[])
+   {
+   int i;
+
+   printf ("argc = %d\n", argc);
+
+   for (i=0; i<argc; i++)
+      printf ("parm %d: %s\n", i, argv[i]);
+
+   return 0;
+   }
+

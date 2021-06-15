@@ -1,0 +1,40 @@
+#include <GnuSys.Gh>
+
+int FunctionA (int i)
+   {
+   printf ("Replacement Function A [%d]\n", i);
+   return i * 2;
+   }
+
+int FunctionG (int i)
+   {
+   printf ("Function G [%d]\n", i);
+   return i * 2;
+   }
+
+int FunctionH (int i)
+   {
+   printf ("Function H [%d]\n", i);
+   return i * 2;
+   }
+
+int FunctionI (int i)
+   {
+   printf ("Function I [%d]\n", i);
+   return i * 2;
+   }
+
+PSZ FunctionList (int i)
+   {
+   PSZ psz;
+
+   psz = "Testing 123";
+
+   switch (i)
+      {
+      case 0: return "FunctionG";
+      case 1: return "FunctionH";
+      case 2: return "FunctionI";
+      }
+   return (PSZ)NULL;
+   }

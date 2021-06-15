@@ -1,0 +1,2 @@
+      GCDR /nol
+      -+o\d\COMPILE.obj -+o\d\ERROR.obj -+o\d\DEFINE.obj -+o\d\SYMBOL.obj -+o\d\MEM.obj -+o\d\NODE.obj -+o\d\TOKENIZE.obj -+o\d\PARSE.obj -+o\d\TYPE.obj -+o\d\CHECK.obj -+o\d\LABEL.obj -+o\d\OPT.obj -+o\d\GEN.obj -+o\d\GENEXPR.obj -+o\d\GENFN.obj -+o\d\GENGLOB.obj -+o\d\GENOP.obj -+o\d\KEEP.obj -+o\d\CODMAINT.obj -+o\d\LOADGX.obj -+o\d\EXTERN.obj -+o\d\INTERNAL.obj -+o\d\VM.obj ;

@@ -1,0 +1,73 @@
+#include <gnusys.gh>
+
+typedef struct _st1
+   {
+   char  c;
+   int   i;
+   float f;
+   struct _st1 *next;
+   } ST1;
+
+typedef struct _st2
+   {
+   char c, cc;
+   ST1  st1;
+   ST1  stA[10];
+   int  i[8];
+   } ST2;
+
+
+void SetST1 (ST1 *pst1, int i)
+   {
+   pst1->c    = (char)i;
+   pst1->i    = i;
+   pst1->f    = i;
+   pst1->next = (ST1 *)0;
+   }
+
+void PrintST1(ST1 *pst1)
+   {
+   printf ("-----------------------------------\n");
+   printf ("%lf %c %d\n", pst1->f, pst1->c, pst1->i);
+   }
+
+int TestStruct2 (void)
+   {
+   ST2 *pst2, st2a[5];
+   int i, j;
+
+   for (i=0; i<5; i++)
+      {
+      pst2 = st2a + i;
+      pst2->c   = 'A' + (char)i;
+      pst2->cc  = 'A' + (char)i;
+      SetST1 (&(pst2->st1), i);
+      for (j=0; j<10; j++)
+         SetST1 (pst2->stA + j, i*10+j);
+      for (j=0; j<8; j++)
+         pst2->i[j] = i*8+j;
+      }
+
+   for (i=0; i<5; i++)
+      {
+      pst2 = st2a + i;
+
+      printf ("===================================\n");  //
+      printf (" %c %c\n", pst2->c, pst2->cc);            //
+                                                         //
+      PrintST1(&(pst2->st1));
+      for (j=0; j<10; j++)
+         PrintST1(pst2->stA + j);
+      for (j=0; j<8; j++)
+         printf ("%d ", pst2->i[j]);
+      printf ("\n");
+      }
+   return 0;
+   }
+
+
+int main (int argc, char *argv[])
+   {
+   TestStruct2 ();
+   }
+

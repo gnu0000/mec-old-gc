@@ -1,0 +1,51 @@
+/*
+ *
+ * 70.gc
+ * Thursday, 3/27/1997.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+int TestSwitch(void)
+   {
+   int i = 9;
+   int j;
+   float f = 3.333;
+
+   switch (i)
+      {
+      case 1:
+         printf ("switch i case 1\n");
+         break;
+
+      case 2: 
+         printf ("switch i case 2\n");
+         break;
+
+      case 3:
+         printf ("switch i case 3\n");
+         break;
+
+      case 4:
+         printf ("switch i case 4\n");
+         break;
+
+      case 5:
+         printf ("switch i case 5\n");
+         break;
+
+      default:
+         printf ("switch i default\n");
+         break;
+      }
+   printf ("%d", j);
+   return 0;
+   }
+
+int main (int argc, char *argv[])
+   {
+   TestSwitch ();
+   return 0;
+   }

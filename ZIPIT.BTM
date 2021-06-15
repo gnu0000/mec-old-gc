@@ -1,0 +1,22 @@
+@echo off
+set base=GC
+set tim=%_month-%_day
+if %_month GE 10 set tim=%_month%%_day
+
+set charval=96
+:loop1
+set charval=%@eval[%charval+1]
+set name=%base%%tim%%@char[%charval].ZIP
+
+if not exist %name goto next1
+echo %name exists already
+goto loop1
+
+:next1
+if not exist bkup\%name goto break1
+echo bkup\%name exists already
+goto loop1
+
+:break1
+echo Zipping to %name
+pkzip -exrp -x*.exe -x*.obj -x*.err -x*.lib -x*.zip -x*.bak -x*.map -x*.bak -x*.gx -x*.lst -x*.dmp %name *.*

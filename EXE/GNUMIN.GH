@@ -1,0 +1,34 @@
+
+#define BOOL   int
+#define TRUE   1
+#define FALSE  0
+
+#define NULL   (PVOID)0
+
+#define CHAR   char
+#define UCHAR  char
+#define BYTE   char
+#define SHORT  short
+#define USHORT short
+#define LONG   long
+#define ULONG  long
+#define INT    int
+#define UINT   int
+#define FLOAT  float
+
+typedef short *PSHORT ;
+typedef short *PUSHORT;
+typedef long  *PLONG  ;
+typedef long  *PULONG ;
+typedef int   *PINT   ;
+typedef int   *PUINT  ;
+typedef void  *PVOID  ;
+typedef char  *PSZ    ;
+
+#define CCONV
+#define FILE    PVOID
+
+
+int   printf  (PSZ s)           : 110;
+int   f_getc      (PVOID fp)    : 310;
+int   k_getch         (void)    : 400;

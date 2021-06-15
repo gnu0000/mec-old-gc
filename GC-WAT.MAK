@@ -1,0 +1,151 @@
+STAK = 90000
+LINKER =wlink
+STUB = WSTUBQ.exe
+
+OBJ = o\$(MODE)32
+EXE = exe\$(MODE)32
+LIB1 = Gnu32$(MODE)S
+LIB2 = gclib\GC$(MODE)3
+
+!IF "$(MODE)" == "D"
+COPT = -mf -bt=dos -fp5 -3s -s -w3 -ze -zp1 -zq -od -d2 -fo=$(OBJ)\$(@B).obj
+DBUG = DEBUG  ALL
+EXCP = copy $(EXE)\$(@B).e $(EXE)\$(@B).exe
+!ENDIF
+
+!IF "$(MODE)" == "M"
+echo not supported!
+!ENDIF
+
+!IF "$(MODE)" == "O"
+COPT = -mf -bt=dos -fp5 -3s -s -w3 -ze -zp1 -zq -omaxnet -fo=$(OBJ)\$(@B).obj
+STUB = PSTUB.exe
+EXCP = 4gwbind 4gwpro.exe $(EXE)\$(@B).e $(EXE)\$(@B).exe -N
+DBUG =
+!ENDIF
+
+LIBS = $(LIB1), $(LIB2)
+
+#target list 
+#
+all: gc.exe gx.exe gi.exe dis.exe gxnt.exe
+
+gc:  gc.exe 
+
+gx:  gx.exe 
+
+gxnt: gxnt.exe 
+
+gi:  gi.exe 
+
+dis: dis.exe
+
+
+
+$(OBJ)\gc.obj : gc.c gclib\gclib.h 
+   wcc386 $(COPT) $(@B).c
+
+$(OBJ)\gx.obj : gx.c gclib\gclib.h fn_c.h fn_gnu.h 
+   wcc386 $(COPT) $(@B).c
+
+$(OBJ)\gxnt.obj : gxnt.c gclib\gclib.h fn_c.h fn_odbc.h 
+   wcc386 $(COPT) $(@B).c
+
+$(OBJ)\gi.obj : gi.c gclib\gclib.h fn_c.h fn_gnu.h 
+   wcc386 $(COPT) $(@B).c
+
+$(OBJ)\dis.obj : dis.c gclib\gclib.h gclib\opcodes.h gclib\binfile.h 
+   wcc386 $(COPT) $(@B).c
+
+$(OBJ)\fn_c.obj : fn_c.c gclib\gclib.h 
+   wcc386 $(COPT) $(@B).c
+
+$(OBJ)\fn_gnu.obj : fn_gnu.c gclib\gclib.h 
+   wcc386 $(COPT) $(@B).c
+
+$(OBJ)\fn_odbc.obj : fn_odbc.c gclib\gclib.h odbc.h 
+   wcc386 $(COPT) $(@B).c
+
+$(OBJ)\odbc.obj : odbc.c odbc.h 
+   wcc386 $(COPT) $(@B).c
+
+
+gc.exe :  $(OBJ)\gc.obj $(LIB2).lib
+	$(LINKER) @<<$(@B).lnk
+   system   dos4g
+      option   map=$(@B)
+   option   Quiet
+   option   stub=$(STUB)
+   option   stack=$(STAK)
+   $(DBUG)
+   name     $(EXE)\$(@B).e
+   lib      $(LIBS)
+
+file  $(OBJ)\gc
+<<nokeep
+  $(EXCP)
+  del  $(EXE)\$(@B).E
+
+gx.exe :  $(OBJ)\gx.obj $(OBJ)\fn_c.obj $(OBJ)\fn_gnu.obj $(LIB2).lib
+	$(LINKER) @<<$(@B).lnk
+   system   dos4g
+      option   map=$(@B)
+   option   Quiet
+   option   stub=$(STUB)
+   option   stack=$(STAK)
+   $(DBUG)
+   name     $(EXE)\$(@B).e
+   lib      $(LIBS)
+
+   file  $(OBJ)\$(@B), $(OBJ)\fn_gnu, $(OBJ)\fn_c
+<<nokeep
+  $(EXCP)
+  del  $(EXE)\$(@B).E
+
+gi.exe :  $(OBJ)\gi.obj $(OBJ)\fn_c.obj $(LIB2).lib
+	$(LINKER) @<<$(@B).lnk
+   system   nt
+      option   map=$(@B)
+   option   Quiet
+   option   stub=$(STUB)
+   option   stack=$(STAK)
+   $(DBUG)
+   name     $(EXE)\$(@B).e
+   lib      $(LIBS)
+
+   file  $(OBJ)\$(@B), $(OBJ)\fn_gnu, $(OBJ)\fn_c
+<<nokeep
+   ren $(EXE)\$(@B).e $(EXE)\$(@B).exe
+
+dis.exe :  $(OBJ)\dis.obj $(LIB2).lib
+	$(LINKER) @<<$(@B).lnk
+   system   dos4g
+      option   map=$(@B)
+   option   Quiet
+   option   stub=$(STUB)
+   option   stack=$(STAK)
+   $(DBUG)
+   name     $(EXE)\$(@B).e
+   lib      $(LIBS)
+
+   file  $(OBJ)\$(@B)
+<<nokeep
+  $(EXCP)
+  del  $(EXE)\$(@B).E
+
+gxnt.exe :  $(OBJ)\gxnt.obj $(OBJ)\fn_c.obj $(LIB2).lib $(OBJ)\fn_odbc.obj $(OBJ)\odbc.obj
+	$(LINKER) @<<$(@B).lnk
+   system   nt
+      option   map=$(@B)
+   option   Quiet
+   option   stub=$(STUB)
+   option   stack=$(STAK)
+   $(DBUG)
+   name     $(EXE)\$(@B).e
+   lib      $(LIBS)
+
+   lib      odbc32
+   file $(OBJ)\$(@B), $(OBJ)\fn_c, $(OBJ)\fn_odbc, $(OBJ)\odbc
+<<nokeep
+   ren $(EXE)\$(@B).e $(EXE)\$(@B).exe
+

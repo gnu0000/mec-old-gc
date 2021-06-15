@@ -1,0 +1,56 @@
+#include <gnusys.gh>
+
+#define MAX_LINES 250
+
+
+//int array_2 [10][20];
+
+typedef int Arr1[20];
+Arr1 array_2[10];
+
+
+int main (int argc, char *argv[])
+   {
+   int i, j;
+
+   for (i=0; i<10; i++)
+      for (j=0; j<10; j++)
+         array_2[i][j] = i*100+j;
+
+   for (i=0; i<10; i++)
+      {
+      for (j=0; j<10; j++)
+         {
+         printf ("%4d ", array_2[i][j]);
+         }
+      printf ("\n");
+      }
+   }
+
+
+//int main (int argc, char *argv[])
+//   {
+//   int  i, j;
+//   Arr1 *pa;
+//
+//   for (i=0; i<10; i++)
+//      for (j=0; j<10; j++)
+//         {
+////         (array_2[i])[j] = i*100+j;
+//         pa = array_2 + i;
+//         (*pa)[j] = i*100+j;
+//         }
+//
+//   for (i=0; i<10; i++)
+//      {
+//      for (j=0; j<10; j++)
+//         {
+////         printf ("%4d ", (array_2[i])[j]);
+//
+//         pa = array_2 + i;
+//         printf ("%4d ", (*pa)[j]);
+//
+//         }
+//      printf ("\n");
+//      }
+//   }

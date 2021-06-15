@@ -1,0 +1,30 @@
+/*
+ *
+ * win1.gc
+ * Monday, 4/7/1997.
+ *
+ */
+
+#include <gnusys.gh>
+
+int main (int argc, char *argv[])
+   {
+   INT   i, c, bOK, uLines;
+   FILE  fp;
+   INT   iRet;
+   CHAR  sz[200];
+
+   fp = fopen ("readfile.gc", "rt");
+   for (i=0; i<55; i++)
+      {
+      iRet = FilReadLine (fp, sz, "", 500);
+
+      printf ("%3d> %8.8lx [%s]\n", i, (LONG)iRet, sz);
+
+      if (iRet == -1)
+         break;
+      }
+   printf ("Done.\n");
+   return 0;
+   }
+

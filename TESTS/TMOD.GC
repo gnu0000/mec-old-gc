@@ -1,0 +1,67 @@
+#include <GnuSys.Gh>
+
+
+int FunctionA (int i)
+   {
+   printf ("Function A [%d]\n", i);
+   return i*2;
+   }
+
+int FunctionB (int i)
+   {
+   printf ("Function B [%d]\n", i);
+   return i*2;
+   }
+
+int FunctionC (int i)
+   {
+   printf ("Function C [%d]\n", i);
+   return i*2;
+   }
+
+
+int main (int argc, char *argv[])
+   {
+   int i, uRet, uFn;
+   PSZ psz;
+
+   i = FunctionA (10); printf ("ret=%d\n", i);
+   i = FunctionB (20); printf ("ret=%d\n", i);
+   i = FunctionC (30); printf ("ret=%d\n", i);
+   printf ("---------------\n");
+   printf ("Loading module tmod-a.gx\n");
+   uRet = LoadModule ("tmod-a.GX");
+   printf ("LoadModule returns %d\n", uRet);
+   printf ("---------------\n");
+
+   i = Call ("FunctionA",11); printf ("ret=%d\n", i);
+   i = Call ("FunctionB",22); printf ("ret=%d\n", i);
+   i = Call ("FunctionC",33); printf ("ret=%d\n", i);
+   i = Call ("FunctionD",44); printf ("ret=%d\n", i);
+   i = Call ("FunctionE",55); printf ("ret=%d\n", i);
+   i = Call ("FunctionF",66); printf ("ret=%d\n", i);
+
+   printf ("---------------\n");
+   printf ("Loading module tmod-b.gx\n");
+   uRet = LoadModule ("tmod-b.GX");
+   printf ("LoadModule returns %d\n", uRet);
+   printf ("---------------\n");
+
+   for (uFn=0; psz = (PSZ)Call ("FunctionList", uFn); uFn++)
+      {
+      i = Call (psz, uFn); printf ("ret=%d\n", i);
+      }
+
+   i = FunctionExists ("FunctionC");
+   printf ("FunctionExists (FunctionC)=%d\n", i);
+   i = FunctionExists ("FunctionD");
+   printf ("FunctionExists (FunctionD)=%d\n", i);
+   i = FunctionExists ("FunctionZ");
+   printf ("FunctionExists (FunctionZ)=%d\n", i);
+
+  
+   i = FunctionA (10); printf ("ret=%d\n", i);
+
+   return 0;
+   }
+

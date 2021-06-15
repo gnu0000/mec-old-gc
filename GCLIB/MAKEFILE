@@ -1,0 +1,35 @@
+!IF "$(DEVELOP)" == "WAT11"
+PMK = gcl-wat
+!ELSE
+PMK = gcl-msc
+!ENDIF
+
+
+debug:
+   premake $(PMK).Pre $(PMK).mak
+   nmake -nologo -f $(PMK).mak MODE=D
+
+mem:
+   premake $(PMK).Pre $(PMK).mak
+   nmake -nologo -f $(PMK).mak MODE=M
+
+opt:
+   premake $(PMK).Pre $(PMK).mak
+   nmake -nologo -f $(PMK).mak MODE=O
+
+all:
+   premake $(PMK).Pre $(PMK).mak
+   nmake -nologo -f $(PMK).mak MODE=D
+   premake $(PMK).Pre $(PMK).mak
+   nmake -nologo -f $(PMK).mak MODE=M
+   premake $(PMK).Pre $(PMK).mak
+   nmake -nologo -f $(PMK).mak MODE=O
+
+clean:
+   del dr\*.obj
+   del mr\*.obj
+   del or\*.obj
+   del d32\*.obj
+   del o32\*.obj
+   del *.lib
+   del *.bak

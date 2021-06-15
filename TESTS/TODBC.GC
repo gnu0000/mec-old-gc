@@ -1,0 +1,42 @@
+/*
+ *
+ * odbc1.gc
+ * Tuesday, 4/8/1997.
+ *
+ * This is an example of using the simple ODBC api
+ * This example assumes you have setup an odbc data source
+ * named Northwind which includes a table named Customers
+ *
+ */
+#include <gnusys.gh>
+#include <gnuodbc.gh>
+
+
+int main (int argc, char *argv[])
+   {
+   PCON  pcon;
+   PSTM  pstm;
+   PVOID *ppvoid;
+   INT   i, iRows;
+
+   ODBCInit ();
+   if (!(pcon = ODBCConnect ("BIDX-WI", NULL, NULL)))
+      return printf ("odbcconnect failed");
+
+   if (!(pstm  = ODBCExec (pcon, "select * from Lettings", TRUE)))
+      return printf ("odbcexec failed\n");
+
+   printf ("# columns = %d\n", pstm->iCols);
+   for (iRows=0; iRows < 2000; iRows++)
+      {
+      if (!(ppvoid = ODBCGetRow (pstm)))
+         break;
+      for (i=1; i<=pstm->iCols; i++)
+         printf (">%s\n", (PSZ)(ppvoid[i]));
+      printf ("\n\n");
+      }
+   printf ("# rows = %d\n", iRows);
+   ODBCDisconnect (pcon);
+   ODBCTerm ();
+   return 0;
+   }

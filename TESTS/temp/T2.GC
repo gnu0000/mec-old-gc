@@ -1,0 +1,23 @@
+/*
+ *
+ * t2.gc
+ * Thursday, 3/5/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+int main (int argc, char *argv[])
+   {
+   int  z, i, j, k;
+   char sz[64];
+
+   strcpy (sz, "Hello World");
+   i = *sz;
+   j = (int)*sz;
+   k = *(int *)sz;
+   printf ("i=%d j=%d k=%d\n", i, j, k);
+   return 0;
+   }
+//

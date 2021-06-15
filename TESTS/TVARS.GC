@@ -1,0 +1,52 @@
+/*
+ *
+ * test1.gc
+ * Monday, 2/16/1998.
+ *
+ *
+ * test: main params
+ *       global & local variables with static initializers
+ *
+ */
+
+#include <gnusys.gh>
+
+
+int   iGlobal   = 10;
+char  cGlobal   = 'A';
+PSZ   pszGlobal = "Global Static Text";
+float fGlobal   = 1234.5678;
+
+
+int main (int argc, char *argv[])
+   {
+   int i;
+
+   int   iLocal   = 11;
+   char  cLocal   = 'B';
+   PSZ   pszLocal = "Local Static Text";
+   float fLocal   = 8765.4321;
+
+   printf ("\nArgument passing\n");
+   printf ("=======================================================\n");
+   printf ("argc = %d\n", argc);
+   for (i=0; i<=argc; i++)
+      printf ("parm #%d = %s\n", i, argv[i]);
+
+   printf ("\nGlobal Variables\n");
+   printf ("=======================================================\n");
+   printf ("Global int   = %d \n", iGlobal  );
+   printf ("Global char  = %c \n", cGlobal  );
+   printf ("Global psz   = %s \n", pszGlobal);
+   printf ("Global float = %lf\n", fGlobal  );
+
+   
+   printf ("\nLocal Variables\n");
+   printf ("=======================================================\n");
+   printf ("Local int   = %d \n", iLocal  );
+   printf ("Local char  = %c \n", cLocal  );
+   printf ("Local psz   = %s \n", pszLocal);
+   printf ("Local float = %lf\n", fLocal  );
+
+   return 0;
+   }

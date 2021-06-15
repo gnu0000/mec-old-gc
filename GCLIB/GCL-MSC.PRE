@@ -1,0 +1,74 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~  (C) 1997 Info Tech Inc.                                         ~
+~                                                                  ~
+~  Craig Fitzgerald                                                ~
+~                                                                  ~
+~                                                                  ~
+~  This is the PreMake file for the GC library.                    ~
+~  see gclib.h for more information                                ~
+~                                                                  ~
+~  This file creates a MSC 7 makefile for GCLIB                    ~
+~  Call makefile with: "NMAKE -f makefile MODE=xx" where:          ~
+~                                                                  ~
+~     MODE=DR to make a debuggung real mode lib                    ~
+~     MODE=OR to make a optimized real mode lib                    ~
+~     MODE=MR to make a mem debug real mode lib                    ~
+~                                                                  ~
+~  possible libraries built:                                       ~
+~     GcLibdr - debugging dos library                              ~
+~     GcLibor - optimized dos library                              ~
+~     GcLibmr - mem debugging dos library                          ~
+~                                                                  ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!IF "$(MODE)" == "D"
+OBJ   = o\d
+COPT  = /c /W3 /AL /Od /Zip /Gy /nologo /Fo$(OBJ)\$(@B).obj 
+GCLIB = GCDR
+
+!ENDIF
+
+!IF "$(MODE)" == "M"
+OBJ = o\m
+COPT = /c /W3 /AL /Od /Zip /Gy /nologo /Fo$(OBJ)\$(@B).obj /DDEBUG /DMEM_DEBUG
+GCLIB = GCMR
+!ENDIF
+
+!IF "$(MODE)" == "O"
+OBJ = o\o
+COPT = /c /W3 /AL /Ox /Grs /Gy /Zp /nologo /Fo$(OBJ)\$(@B).obj 
+GCLIB = GCOR
+!ENDIF
+
+
+all : $(GCLIB).lib
+
+#DISASSEM,
+#GC,
+#GCPLAY,
+#CFUNC,
+:FileList SrcFiles =
+   {
+   COMPILE,  ERROR,    DEFINE,   SYMBOL,   
+   MEM,      NODE,     TOKENIZE, PARSE,    
+   TYPE,     CHECK,    LABEL,    OPT,      
+   GEN,      GENEXPR,  GENFN,    GENGLOB,  
+   GENOP,    KEEP,     
+
+   CODMAINT, LOADGX,   EXTERN,   INTERNAL,
+   VM
+   }
+
+#
+# Make The GnuLib library
+#
+:CmdList CmdLine = {"cl $(COPT) $(@B).c"}
+
+:Expand SrcFiles,CmdLine,$(OBJ)\,.obj,,.c,INCLUDES 
+
+$(GCLIB).lib : {F: SrcFiles,$(OBJ)\,.obj}
+  lib /PAGE:32 $*,y;
+  lib /PAGE:32 @<<lib.lbr
+      $* /nol
+      {F: SrcFiles,-+$(OBJ)\,.obj};
+<<KEEP
+

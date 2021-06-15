@@ -1,0 +1,11 @@
+#include <gnusys.gh>
+#include <gnuscr.gh>
+#include <gnuwin.gh>
+
+
+int main (int a)
+   {
+   ScrInitMetrics ();
+   GnuMsg ("Head", "message 1", "message 2");
+   }
+

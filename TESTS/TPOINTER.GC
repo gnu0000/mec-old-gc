@@ -1,0 +1,71 @@
+/*
+ *
+ * tpointer.gc
+ * Monday, 3/2/1998.
+ *
+ */
+
+#include <gnusys.gh>
+
+
+
+int   iG;
+char  cG;
+char  szG[16];
+long  lG;
+float fG;
+
+int PointerTest (int i)
+   {
+   int   iL;
+   char  cL; 
+   char  szL[16];
+   long  lL;
+   float fL;
+
+   int   *piL,  *piG;
+   char  *pcL,  *pcG;
+   char  *pszL, *pszG;
+   long  *plL,  *plG;
+   float *pfL,  *pfG;
+
+
+   piL  = &iL;
+   pcL  = &cL;
+   pszL = szL;
+   plL  = &lL;
+   pfL  = &fL;
+
+   piG  = &iG;
+   pcG  = &cG;
+   pszG = szG;
+   plG  = &lG;
+   pfG  = &fG;
+
+   iL  = 123;
+   cL  = 'A';
+   strcpy (szL, "Hello L");
+   lL  = 123456;
+   fL  = 123.456;
+
+   iG  = 321;
+   cG  = 'B';
+   strcpy (szG, "Hello G");
+   lG  = 654321;
+   fG  = 654.321;
+
+   printf ("local  should print (123)(A)(123456)(Hello L)(123.456)\n");
+   printf ("global should print (321)(B)(654321)(Hello G)(654.321)\n");
+   printf ("------------------------------------------------------\n");
+
+   printf ("local  direct: int(%4d) char(%c) long(%6ld) str(%s) float (%lf)\n", iL, cL, lL, szL, fL);
+   printf ("local   deref: int(%4d) char(%c) long(%6ld) str(%s) float (%lf)\n", *piL, *pcL, *plL, pszL, *pfL);
+   printf ("global direct: int(%4d) char(%c) long(%6ld) str(%s) float (%lf)\n", iG, cG, lG, szG, fG);
+   printf ("global  deref: int(%4d) char(%c) long(%6ld) str(%s) float (%lf)\n", *piG, *pcG, *plG, pszG, *pfG);
+   }
+
+
+int main (int argc, char *argv[])
+   {
+   PointerTest (0);
+   }

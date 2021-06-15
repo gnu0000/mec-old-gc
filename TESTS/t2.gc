@@ -1,0 +1,18 @@
+#include <gnusys.gh>
+
+typedef int zzz[4];
+
+int main (int argc, char *argv[])
+   {
+   int i;
+   zzz aa[4];
+
+   for (i=0; i<4; i++)
+      (aa[0])[i] = 6;
+
+   for (i=0; i<4; i++)
+      printf ("[%3d]", 8);   // printf ("%3d ", (aa[0])[i]);
+   printf ("\n");
+   return 0;
+   }
+//

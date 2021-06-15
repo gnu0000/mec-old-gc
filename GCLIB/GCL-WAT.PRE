@@ -1,0 +1,61 @@
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~  (C) 1997 Info Tech Inc.                                         ~
+~                                                                  ~
+~  Craig Fitzgerald                                                ~
+~                                                                  ~
+~                                                                  ~
+~  This is the PreMake file for the GC library.                    ~
+~  see gclib.h for more information                                ~
+~                                                                  ~
+~  This file creates a Watcom makefile for GCLIB                   ~
+~  Call makefile with: "NMAKE -f makefile MODE=xx" where:          ~
+~                                                                  ~
+~     MODE=D to make a debuggung real mode lib                     ~
+~     MODE=O to make a optimized real mode lib                     ~
+~                                                                  ~
+~  possible libraries built:                                       ~
+~     GcLibd3 - debugging dos library                              ~
+~     GcLibo3 - optimized dos library                              ~
+~                                                                  ~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ODIR  = o\$(MODE)32
+GCLIB = gc$(MODE)3
+
+
+!IF "$(MODE)" == "D"
+CFLAGS = -mf -bt=dos -fp5 -3s -s -w3 -ze -zp1 -zq -od -d2 -fo=$(ODIR)\$(@B).obj
+!ENDIF
+
+!IF "$(MODE)" == "O"
+CFLAGS = -mf -bt=dos -fp5 -3s -s -w3 -ze -zp1 -zq -omaxnet -fo=$(ODIR)\$(@B).obj
+!ENDIF
+
+!IF "$(MODE)" == "M"
+echo not supported!
+!ENDIF
+
+all : $(GCLIB).lib
+
+:FileList SrcFiles =
+   {
+   COMPILE,  ERROR,    DEFINE,   SYMBOL,   
+   MEM,      NODE,     TOKENIZE, PARSE,    
+   TYPE,     CHECK,    LABEL,    OPT,      
+   GEN,      GENEXPR,  GENFN,    GENGLOB,  
+   GENOP,    KEEP,     
+
+   CODMAINT, LOADGX,   EXTERN,   INTERNAL,
+   VM
+   }
+
+#
+# Make The GCLib library
+#
+:CmdList Cmp = {"wcc386 $(CFLAGS) $(@B).c"}
+
+:Expand SrcFiles,Cmp,$(ODIR)\,.obj,,.c,INCLUDES 
+
+$(GCLIB).lib : {F: SrcFiles,$(ODIR)\,.obj}
+   wlib -b $(GCLIB) @<<lib.lst
+{X: SrcFiles,-+$(ODIR)\,.obj, , , 3}
+<<KEEP

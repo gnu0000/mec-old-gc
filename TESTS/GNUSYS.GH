@@ -1,0 +1,133 @@
+
+#define BOOL   int
+#define TRUE   1
+#define FALSE  0
+
+#define NULL   (PVOID)0
+
+#define CHAR   char
+#define UCHAR  char
+#define BYTE   char
+#define SHORT  short
+#define USHORT short
+#define LONG   long
+#define ULONG  long
+#define INT    int
+#define UINT   int
+#define FLOAT  float
+
+typedef char  *PCHAR  ;
+typedef char  *PUCHAR ;
+typedef short *PSHORT ;
+typedef short *PUSHORT;
+typedef long  *PLONG  ;
+typedef long  *PULONG ;
+typedef int   *PINT   ;
+typedef int   *PUINT  ;
+typedef float *PFLOAT ;
+typedef void  *PVOID  ;
+typedef char  *PSZ    ;
+typedef char **PPSZ   ;
+typedef char  *PBYTE  ;
+
+#define CCONV
+#define FILE    PVOID
+
+int   main (int argc, PSZ argv[]);
+
+
+int   DumpStk    (int i)                  : 32000;
+int   DumpMem    (PVOID paddr, int i)     : 32001;
+int   ParmCount  (void)                   : 32002;
+int   ParmType   (int i)                  : 32003;
+int   ParmWord   (int i)                  : 32004;
+PSZ   ParmString (int i)                  : 32004;
+float ParmFloat  (int i)                  : 32005;
+int   Call       (PSZ fnName)             : 32006;
+int   LoadModule (PSZ FileName)           : 32007;
+int   FunctionExists (PSZ fnName)         : 32008;
+void  *SetPtr    (void)                   : 32700;
+
+
+PVOID malloc  (int  uSize)                : 101;
+PVOID calloc  (int  uNum, int  uSize)     : 102;
+PVOID realloc (PVOID ptr, int  uSize)     : 103;
+void  free    (PVOID ptr)                 : 104;
+PSZ   strdup  (PSZ psz)                   : 105;
+
+int   printf  (PSZ s)                     : 110;
+int   sprintf (PSZ s1, PSZ s2)            : 111;
+
+PSZ   strchr  (PSZ s,  char c)            : 200;
+PSZ   strrchr (PSZ s,  char c)            : 201;
+PSZ   strcat  (PSZ s1, PSZ s2)            : 202;
+int   strcmp  (PSZ s1, PSZ s2)            : 203;
+PSZ   strcpy  (PSZ s1, PSZ s2)            : 204;
+                                          
+PSZ   StrClip      (PSZ pszStr, PSZ pszClipList)                  : 205;
+PSZ   StrStrip     (PSZ pszStr, PSZ pszStripList)                 : 206;
+int   StrGetWord   (PSZ *ppsz, PSZ pszWord, PSZ pszSkip,
+                     PSZ pszDelim, BOOL bCSV, BOOL bEatDelim)     : 207;
+int   StrGetIdent  (PSZ *ppsz, PSZ pszWord, BOOL bAllowNum,       
+                     BOOL bEatDelim)                              : 208;
+int   StrEatWord   (PSZ *ppszStr, PSZ pszTarget)                  : 209;
+int   StrEatChar   (PSZ *ppsz, PSZ pszEdibles, PSZ pszWhitespace) : 210;
+PSZ   StrSkipBy    (PSZ psz, PSZ pszSkipList)                     : 211;
+PSZ   StrSkipTo    (PSZ psz, PSZ pszToList)                       : 212;
+BOOL  StrBlankLine (PSZ pszLine)                                  : 213;
+PSZ   strnchr      (PSZ psz, int c, int  uLen)                   : 214;
+BOOL  StrMatches   (PSZ pszName, PSZ pszWildCard, BOOL bCase)     : 215;
+PSZ   StrMyCat     (PSZ pszDest, PSZ pszSrc)                      : 216;
+PSZ  *StrMakePPSZ  (PSZ pszStr, PSZ pszDelim, BOOL bCSV,
+                     BOOL bTrim, int  *puCols)                   : 217;
+int   StrPPSZCut   (PSZ ppsz, PSZ pszLine)                        : 218;
+PSZ   StrMakeCSVField (PSZ pszDest, PSZ pszSrc)                   : 219;
+PSZ   StrUnCSV        (PSZ pszDest, PSZ pszSrc)                   : 220;
+BOOL  StrGetCSVField  (PSZ szFrom, PSZ psz, int  uIndex)         : 221;
+PSZ   StrAddQuotes (PSZ psz)                                      : 222;
+PSZ   StrCookLine  (PSZ pszDest, PSZ pszSrc, int  fOptions)      : 223;
+PSZ   Stristr      (PSZ psz1, PSZ psz2)                           : 224;
+BOOL  StrTrue      (PSZ psz)                                      : 225;
+
+
+PVOID fopen  (PSZ name, PSZ flags)                                : 300;
+PVOID fclose (PVOID file)                                         : 301;
+int   fread  (PSZ buff, int  size, int  ct, PVOID file)         : 302;
+int   fwrite (PSZ buff, int  size, int  ct, PVOID file)         : 303;
+
+int   FilReadLine (PVOID fpIn, PSZ pszStr, PSZ pszComments, 
+                  int  iMaxLen)                                  : 304;
+int   FilReadTo   (PVOID fpIn, PSZ pszStr, PSZ pszDelim, 
+                  int  iMaxLen, BOOL bEatDelim)                  : 305;
+int   FilReadWhile(PVOID fpIn, PSZ pszStr, PSZ pszChars, 
+                  int  iMaxLen, BOOL bEatDelim)                  : 306;
+int   FilReadWord (PVOID fpIn, PSZ pszWord, PSZ pszSkip,          
+                  PSZ pszDelim, int  iMaxLen, BOOL bEatDelim)    : 307;
+long  FilGetLine  (void)                                          : 308;
+long  FilSetLine  (long ulGlobalLine)                             : 309;
+int   f_getc      (PVOID fp)                                      : 310;
+int   f_ungetc    (int  c, PVOID fp)                             : 311;
+
+int   k_getch         (void)                                       : 400;
+int   k_ungetch       (int  c)                                    : 401;
+int   k_kbhit         (void)                                       : 402;
+int   KeyGet          (BOOL bUpper)                                : 403;
+int   KeyChoose       (PSZ pszKeyList, PSZ pszExtKeyList)          : 404;
+void  KeyClearBuff    (void)                                       : 405;
+int   KeyEditCell     (PSZ psz, int  y, int  x, int  uMax, 
+                        int  uCmd)                                  : 406;
+void  KeyEditCellMode (PSZ pszRets, PSZ pszExtRets, BOOL bUppCase) : 407;
+int   KeyRecord       (PSZ psz, int  uSize)                       : 408;
+int   KeyPlay         (PSZ psz, int  uSize)                       : 409;
+int   KeyStop         (void)                                       : 410;
+int   KeyInfo         (PSZ *ppsz, int  *puSize, int  *puIdx)     : 411;
+void  KeyPlayDelay    (int  uPlayDelay)                           : 412;
+
+int   atoi  (PSZ psz)                                             : 500;
+int   Rnd   (int iMax)                                            : 502;
+void  srand (int iSeed)                                           : 503;
+long  time  (long *tm)                                            : 504;
+
+//int   ScrInitMetrics (void)                                       : 600;
+//int   GnuMsg         (PSZ sH, PSZ s1, PSZ s2)                     : 700;
+

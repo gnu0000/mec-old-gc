@@ -1,0 +1,257 @@
+_AddChar..........GENOP             _AddFloat.........GENOP
+_AddFn............EXTERN            _AddOp............GENOP
+_AddOpA...........GENOP             _AddOpC...........GENOP
+_AddOpF...........GENOP             _AddOpL...........GENOP
+_AddOpS...........GENOP             _AddOpW...........GENOP
+_AddShort.........GENOP             _AddStatic........GENGLOB
+_AddWord..........GENOP             _bDEBUG...........VM
+_BuildCastNode....TYPE              _CheckDeclaration..CHECK
+_CheckStructDef...CHECK             _CheckStructTypes..TYPE
+_CheckTypedef.....CHECK             _CodAddFunction...CODMAINT
+_CodBuffer........GENOP             _CodClearMerge....GENOP
+_CodFindFunction..CODMAINT          _CodInitBuffer....GENOP
+_CodNewFunction...CODMAINT          _CodSetGlobalPtr..CODMAINT
+_Compile..........COMPILE           _CompileDriver....PARSE
+_CurrentScope.....PARSE             _DefineAdd........DEFINE
+_DefineCheck......DEFINE            _DefineTerm.......DEFINE
+_DumpDataTypeSymbol..SYMBOL         _DumpFunctionSymbol..SYMBOL
+_DumpVariableSymbol..SYMBOL         _FindElement......CHECK
+_FindStructType...CHECK             _GenCondition.....GENEXPR
+_GenDeclaration...GENFN             _GenDumpFunction..GEN
+_GenDumpGlobData..GEN               _GenDumpGlobEnd...GEN
+_GenDumpGlobStart..GEN              _GenDumpTag.......GEN
+_GenExpression....GENEXPR           _GenGlobals.......GENGLOB
+_GenInit..........GEN               _GenSetOutputFn...GEN
+_GenTerm..........GEN               _GNU_CallByName...INTERNAL
+_GNU_DumpMem......INTERNAL          _GNU_DumpStack....INTERNAL
+_GNU_FunctionExists..INTERNAL       _GNU_LoadModule...INTERNAL
+_GNU_ParmCount....INTERNAL          _GNU_ParmFloat....INTERNAL
+_GNU_ParmType.....INTERNAL          _GNU_ParmWord.....INTERNAL
+_GNU_SetPtr.......INTERNAL          _HandleInternalCall..EXTERN
+_iDEFCOUNT........DEFINE            _iDEFIDX..........DEFINE
+_iDEFLEN..........DEFINE            _iIP..............VM
+_indent...........PARSE             _InFileError......ERROR
+_InitInternalFunctions..INTERNAL    _IntTyp...........TYPE
+_iSF..............VM                _iSP..............VM
+_LabBreak.........LABEL             _LabContinue......LABEL
+_LabForward.......LABEL             _LabFree..........LABEL
+_LabFreeRefs......LABEL             _LabHere..........LABEL
+_LabPop...........LABEL             _LabPopBreak......LABEL
+_LabPopContinue...LABEL             _LabPos...........LABEL
+_LabPush..........LABEL             _LabPushBreak.....LABEL
+_LabPushContinue..LABEL             _LabSet...........LABEL
+_LabTop...........LABEL             _LoadFunction.....LOADGX
+_LoadGlobals......LOADGX            _LoadGXModule.....LOADGX
+_LoadSetInputFn...LOADGX            _LoadTag..........LOADGX
+_Log..............ERROR             _LOG_VAL..........ERROR
+_MemSize..........MEM               _MemStkSize.......MEM
+_MemSymSize.......MEM               _NodeAddToEnd.....NODE
+_NodeBuild........NODE              _NodeBuild1.......NODE
+_NodeBuild2.......NODE              _NodeBuild3.......NODE
+_NodeBuild4.......NODE              _NodeBuildLit.....NODE
+_NodeError........ERROR             _NodeFree.........NODE
+_NodeFreeTree.....NODE              _NodeWarn.........ERROR
+_NotStructElement..PARSE            _OptChangeLit.....OPT
+_OptCollapseExpr..OPT               _OrderFn..........EXTERN
+_ParmIndex........INTERNAL          _ParseActuals.....PARSE
+_ParseAtom........PARSE             _ParseBreakStatement..PARSE
+_ParseCaseStatement..PARSE          _ParseCompoundStatement..PARSE
+_ParseContinueStatement..PARSE      _ParseDeclaration..PARSE
+_ParseDeclarationStatement..PARSE   _ParseDeclarator..PARSE
+_ParseDeclaratorList..PARSE         _ParseDefaultStatement..PARSE
+_ParseError.......ERROR             _ParseExpr........PARSE
+_ParseExpression..PARSE             _ParseExpressionStatement..PARSE
+_ParseFormal......PARSE             _ParseFormalList..PARSE
+_ParseForStatement..PARSE           _ParseIfStatement..PARSE
+_ParseInitializer..PARSE            _ParseLevel0......PARSE
+_ParseLevel1......PARSE             _ParseLevel2......PARSE
+_ParseLevel3......PARSE             _ParseLevel4......PARSE
+_ParseLevel5......PARSE             _ParseLevel6......PARSE
+_ParseLevel7......PARSE             _ParseLevel8......PARSE
+_ParseLevel9......PARSE             _ParseLevelA......PARSE
+_ParseLevelB......PARSE             _ParseLevelC......PARSE
+_ParseLevelD......PARSE             _ParseLevelE......PARSE
+_ParseLevelF......PARSE             _ParseMaybeExpression..PARSE
+_ParseNoCommaExpr..PARSE            _ParseParens......PARSE
+_ParseReturnStatement..PARSE        _ParseStatement...PARSE
+_ParseStructDefinition..PARSE       _ParseSwitchStatement..PARSE
+_ParseTypedef.....PARSE             _ParseTypespec....PARSE
+_ParseWhileStatement..PARSE         _pDEFTREE.........DEFINE
+_pfnCURR..........VM                _pfnTREE..........CODMAINT
+_pINFILE..........TOKENIZE          _plSTACK..........VM
+_PopScope.........PARSE             _PrintTree........PARSE
+_pszDEFPTR........DEFINE            _PTree............PARSE
+_PushScope........PARSE             _ReservedWords....TOKENIZE
+_SetCompileOption..COMPILE          _SetScope.........PARSE
+_SetShort.........GENOP             _StoreGlobalDecl..GENGLOB
+_StructTypePtr....TYPE              _SymAdd...........SYMBOL
+_SymAddReserved...SYMBOL            _SymDelete........SYMBOL
+_SymDeleteLocals..SYMBOL            _SymDump..........SYMBOL
+_SymFind..........SYMBOL            _SymFindReserved..SYMBOL
+_SymInit..........SYMBOL            _SymTerm..........SYMBOL
+_TokEat...........TOKENIZE          _TokGet...........TOKENIZE
+_TokInit..........TOKENIZE          _TokPeek..........TOKENIZE
+_TokPrint.........TOKENIZE          _TokReservedString..TOKENIZE
+_TokTerm..........TOKENIZE          _TokTry...........TOKENIZE
+_TokTry2..........TOKENIZE          _TokTry4..........TOKENIZE
+_TokUnget.........TOKENIZE          _TypBuildVal......TYPE
+_TypCast..........TYPE              _TypCheckPointers..TYPE
+_TypCombineVal....TYPE              _TypConvertStatic..TYPE
+_TypFloat.........TYPE              _TypInsert........TYPE
+_TypIntegral......TYPE              _TypIsBaseType....TYPE
+_TypIsType........TYPE              _TypNoVoid........TYPE
+_TypPrecisionWarning..TYPE          _TypPrecisionWarning2..TYPE
+_TypPtr...........TYPE              _TypPtrBase.......TYPE
+_TypResolve.......TYPE              _TypString........TYPE
+_TypXfer..........TYPE              _t_getc...........DEFINE
+_t_ungetc.........DEFINE            _uOPT.............GENOP
+_uSCPPTR..........PARSE             _uSTRUCT_PACK_SIZE..CHECK
+_VirtualMachine...VM                _VMCNextByte......VM
+_VMCNextShort.....VM                _VMCNextWord......VM
+_VMExecFunction...VM                _VMExecMain.......VM
+_VMFixPtr.........VM                _VMGGetByte.......VM
+_VMGGetFloat......VM                _VMGGetPtr........VM
+_VMGGetShort......VM                _VMGGetWord.......VM
+_VMGStoreByte.....VM                _VMGStoreFloat....VM
+_VMGStoreShort....VM                _VMGStoreWord.....VM
+_VMInit...........VM                _VMReturn.........VM
+_VMSPeek..........VM                _VMSPeekF.........VM
+_VMSPeekIn........VM                _VMSPop...........VM
+_VMSPopF..........VM                _VMSPush..........VM
+_VMSPushF.........VM                _VMTerm...........VM
+_VMTruncate.......VM                __defFunction.....GEN
+__defGlobData.....GEN               __defGlobEnd......GEN
+__defGlobStart....GEN               __defLoadFunction..LOADGX
+__defLoadGlobals..LOADGX            __defLoadTag......LOADGX
+__defTag..........GEN               __keepFunction....KEEP
+__keepGlobData....KEEP              __keepGlobEnd.....KEEP
+__keepGlobStart...KEEP              __keepTag.........KEEP
+__newNode.........NODE              
+
+COMPILE           Offset: 00000020H  Code and data size: 24fH
+  _Compile          _SetCompileOption                 
+
+ERROR             Offset: 00000640H  Code and data size: 406H
+  _InFileError      _Log              _LOG_VAL          _NodeError
+  _NodeWarn         _ParseError     
+
+DEFINE            Offset: 00001280H  Code and data size: 4d9H
+  _DefineAdd        _DefineCheck      _DefineTerm       _iDEFCOUNT
+  _iDEFIDX          _iDEFLEN          _pDEFTREE         _pszDEFPTR
+  _t_getc           _t_ungetc       
+
+SYMBOL            Offset: 00002480H  Code and data size: 8a0H
+  _DumpDataTypeSymbol                 _DumpFunctionSymbol
+  _DumpVariableSymbol                 _SymAdd           _SymAddReserved
+  _SymDelete        _SymDeleteLocals  _SymDump          _SymFind
+  _SymFindReserved  _SymInit          _SymTerm        
+
+MEM               Offset: 00004360H  Code and data size: 305H
+  _MemSize          _MemStkSize       _MemSymSize     
+
+NODE              Offset: 00004d00H  Code and data size: 4feH
+  _NodeAddToEnd     _NodeBuild        _NodeBuild1       _NodeBuild2
+  _NodeBuild3       _NodeBuild4       _NodeBuildLit     _NodeFree
+  _NodeFreeTree     __newNode       
+
+TOKENIZE          Offset: 00005c80H  Code and data size: 1183H
+  _pINFILE          _ReservedWords    _TokEat           _TokGet
+  _TokInit          _TokPeek          _TokPrint         _TokReservedString
+  _TokTerm          _TokTry           _TokTry2          _TokTry4
+  _TokUnget       
+
+PARSE             Offset: 00009ae0H  Code and data size: 14ceH
+  _CompileDriver    _CurrentScope     _indent           _NotStructElement
+  _ParseActuals     _ParseAtom        _ParseBreakStatement
+  _ParseCaseStatement                 _ParseCompoundStatement
+  _ParseContinueStatement             _ParseDeclaration
+  _ParseDeclarationStatement          _ParseDeclarator  _ParseDeclaratorList
+  _ParseDefaultStatement              _ParseExpr        _ParseExpression
+  _ParseExpressionStatement           _ParseFormal      _ParseFormalList
+  _ParseForStatement                  _ParseIfStatement
+  _ParseInitializer                   _ParseLevel0      _ParseLevel1
+  _ParseLevel2      _ParseLevel3      _ParseLevel4      _ParseLevel5
+  _ParseLevel6      _ParseLevel7      _ParseLevel8      _ParseLevel9
+  _ParseLevelA      _ParseLevelB      _ParseLevelC      _ParseLevelD
+  _ParseLevelE      _ParseLevelF      _ParseMaybeExpression
+  _ParseNoCommaExpr                   _ParseParens      _ParseReturnStatement
+  _ParseStatement   _ParseStructDefinition              _ParseSwitchStatement
+  _ParseTypedef     _ParseTypespec    _ParseWhileStatement
+  _PopScope         _PrintTree        _PTree            _PushScope
+  _SetScope         _uSCPPTR        
+
+TYPE              Offset: 0000f6e0H  Code and data size: ac1H
+  _BuildCastNode    _CheckStructTypes                   _IntTyp
+  _StructTypePtr    _TypBuildVal      _TypCast          _TypCheckPointers
+  _TypCombineVal    _TypConvertStatic                   _TypFloat
+  _TypInsert        _TypIntegral      _TypIsBaseType    _TypIsType
+  _TypNoVoid        _TypPrecisionWarning                _TypPrecisionWarning2
+  _TypPtr           _TypPtrBase       _TypResolve       _TypString
+  _TypXfer        
+
+CHECK             Offset: 00012100H  Code and data size: 114aH
+  _CheckDeclaration                   _CheckStructDef   _CheckTypedef
+  _FindElement      _FindStructType   _uSTRUCT_PACK_SIZE
+
+LABEL             Offset: 000177a0H  Code and data size: 56fH
+  _LabBreak         _LabContinue      _LabForward       _LabFree
+  _LabFreeRefs      _LabHere          _LabPop           _LabPopBreak
+  _LabPopContinue   _LabPos           _LabPush          _LabPushBreak
+  _LabPushContinue  _LabSet           _LabTop         
+
+OPT               Offset: 00018960H  Code and data size: 2b2H
+  _OptChangeLit     _OptCollapseExpr
+
+GEN               Offset: 000192e0H  Code and data size: 44eH
+  _GenDumpFunction  _GenDumpGlobData  _GenDumpGlobEnd   _GenDumpGlobStart
+  _GenDumpTag       _GenInit          _GenSetOutputFn   _GenTerm
+  __defFunction     __defGlobData     __defGlobEnd      __defGlobStart
+  __defTag        
+
+GENEXPR           Offset: 00019fa0H  Code and data size: 773H
+  _GenCondition     _GenExpression  
+
+GENFN             Offset: 0001d220H  Code and data size: a33H
+  _GenDeclaration 
+
+GENGLOB           Offset: 00020220H  Code and data size: 5e0H
+  _AddStatic        _GenGlobals       _StoreGlobalDecl
+
+GENOP             Offset: 00021980H  Code and data size: 4985H
+  _AddChar          _AddFloat         _AddOp            _AddOpA
+  _AddOpC           _AddOpF           _AddOpL           _AddOpS
+  _AddOpW           _AddShort         _AddWord          _CodBuffer
+  _CodClearMerge    _CodInitBuffer    _SetShort         _uOPT
+
+KEEP              Offset: 00024260H  Code and data size: 2deH
+  __keepFunction    __keepGlobData    __keepGlobEnd     __keepGlobStart
+  __keepTag       
+
+CODMAINT          Offset: 00024a40H  Code and data size: 396H
+  _CodAddFunction   _CodFindFunction  _CodNewFunction   _CodSetGlobalPtr
+  _pfnTREE        
+
+LOADGX            Offset: 00025680H  Code and data size: 4b0H
+  _LoadFunction     _LoadGlobals      _LoadGXModule     _LoadSetInputFn
+  _LoadTag          __defLoadFunction                   __defLoadGlobals
+  __defLoadTag    
+
+EXTERN            Offset: 00026560H  Code and data size: 555H
+  _AddFn            _HandleInternalCall                 _OrderFn
+
+INTERNAL          Offset: 00027840H  Code and data size: 743H
+  _GNU_CallByName   _GNU_DumpMem      _GNU_DumpStack    _GNU_FunctionExists
+  _GNU_LoadModule   _GNU_ParmCount    _GNU_ParmFloat    _GNU_ParmType
+  _GNU_ParmWord     _GNU_SetPtr       _InitInternalFunctions
+  _ParmIndex      
+
+VM                Offset: 00029420H  Code and data size: f39H
+  _bDEBUG           _iIP              _iSF              _iSP
+  _pfnCURR          _plSTACK          _VirtualMachine   _VMCNextByte
+  _VMCNextShort     _VMCNextWord      _VMExecFunction   _VMExecMain
+  _VMFixPtr         _VMGGetByte       _VMGGetFloat      _VMGGetPtr
+  _VMGGetShort      _VMGGetWord       _VMGStoreByte     _VMGStoreFloat
+  _VMGStoreShort    _VMGStoreWord     _VMInit           _VMReturn
+  _VMSPeek          _VMSPeekF         _VMSPeekIn        _VMSPop
+  _VMSPopF          _VMSPush          _VMSPushF         _VMTerm
+  _VMTruncate     

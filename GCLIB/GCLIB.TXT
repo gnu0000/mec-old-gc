@@ -1,0 +1,169 @@
+GNU Language
+GNU File Format
+Virtual Machine
+Calling Convention
+Op Codes
+
+
+
+GNU Language
+------------
+        Preprocessor
+                - no macros
+                #dumpsym
+
+GNF:
+ * program             - {typedef | declaration} ...
+ * 
+ * typedef             - <later>
+ * 
+ * declaration         - typespec declarator_list ';'
+ * declarator_list     - declarator [',' declarator]@
+ * declarator          - ident {var_declarator | fn_declarator}
+ * var_declarator      - {'=' expression | null}
+ * fn_declarator       - initparmlist {compoundstatement | ';' | ':' number ';'}
+ * 
+ * typespec            - 'int' | 'float' | 'char' | 'string'
+ * ident               -
+ * 
+ * initparmlist        - '(' {initparmentry | 'void'} ')'
+ * initparmentry       - typespec ident [',' typespec ident]@
+ * parmvalues          - typespec ident [',' parmvalues]
+ * 
+ * compoundstatement   - '{' statementlist '}'
+ * statementlist       - statement [statementlist]
+ * 
+ * statement           - compoundstatement
+ *                       declaration
+ *                       expression;
+ *                       'if' '(' expression ')' statement
+ *                       'if' '(' expression ')' statement 'else' statement
+ *                       'while' '(' expression ')' statement
+ *                       'for' '(' [expr1]; [expr2]; [expr3] ')' statement
+ *                       'switch' '(' expression ')' statement
+ *                       'case' expression ':' statement
+ *                       'default' ':' statement
+ *                       break ';' 
+ *                       continue ';'
+ *                       return ';'
+ *                       return expression ';'
+ *                       ;
+ * 
+ * 
+ *           
+ * expatom - literal | identifier | function call
+ * expf    - () []c -> .
+ * expe    - expf [ '++' '--']
+ * expd    - [ '!' '~' '-' '++' '--' '*' '&' expd] | expe
+ * expc    - expd [ '*' '/' '%' expd]@
+ * expb    - expc [ '+' '-' expc]@
+ * expa    - expb [ '<<' '>>' expb]@
+ * exp9    - expa [ '<' '>' '<=' '>=' expa]@
+ * exp8    - exp9 [ '==' | '!=' exp9]@
+ * exp7    - exp8 [ '&'  exp8]@
+ * exp6    - exp7 [ '^'  exp7]@
+ * exp5    - exp6 [ '|'  exp6]@
+ * exp4    - exp5 [ '&&' exp5]@
+ * exp3    - exp4 [ '||' exp3]@
+ * exp2    - exp3 [ '?' exp3 ':' exp3]
+ * exp1    - exp2 [ '=' '+=' '-=' '*=' '/=' '%=' '>>=' '<<=' '&=' '^=' '|=' exp1]
+ * exp0    - exp1 [ ','  exp1]@
+ * express - exp0
+ * 
+
+
+
+
+GNU File Format
+---------------
+ ------------------------
+ Binary Data Format:
+    Fn#1 Record
+    Fn#2 Record
+    .
+    .
+    Fn#n Record
+    Global Record
+ ------------------------
+ Fn Record:
+    Function Name (PSZ) 
+    Code Size (2)
+    Code
+    Term Marker (0xFFFF)
+ ------------------------
+ Global Record
+    Global Area Size (2)
+    Global Data      (n)
+    Term Marker (0xFFFF)
+ ------------------------
+
+
+
+Stack conventions
+-----------------
+
+Calling Convention
+------------------
+ fn calling convention:
+
+
+
+ H     |          | \
+       | current  |  \
+ ^     | scratch  |   \
+ |     |----------|   | managed by callee
+ |     | locals   |   |
+ |     |          |   /
+ |     |----------|<------- new SF
+ |     | old SF   | /
+ |     |----------|
+ | [b] |Ret offset| \
+ |     |----------|  \
+ | [d] |#STATUS   |   \
+ |     |----------|   | managed by caller
+ |     |1st parm  |   |
+ |     |nth parm  |   |
+ |     |----------|   |
+ | [a] |zero pad  |   |
+ |     |----------|   /
+ | [c] |ret val   |  /
+ |     |----------| /
+ |     |XXXXXXXXXX|
+ ^     |XXXXXXXXXX|
+       |XXXXXXXXXX|
+ L     |          |
+
+ [a] if actual parameters < formal parameters, space for the other
+  params is made by zero padding the stack.
+ [b][c] return value [c] is found using the offset [b] This allows
+  the callee to find it even though it is at an unknowd depth.  The
+  depth is unknown because # actual parameters may be > than # formal 
+  parameters.
+ [d] This is the number of actuals that were passed to the fn.  This
+  value does not include the zero padded ones.  This allows the 
+  callee to determine how many parms were passed to it (although it 
+  won't know the types of any extra params).
+
+
+ fn calling convention:
+
+Virtual Machine
+---------------
+
+
+Op Codes
+--------
+
+
+To Do
+-----
+check: check struct typedef in parm passing
+struct passing
+
+shortcoming: 
+tokenizer does not store string length, null will terminate
+the length needs to be in Token and Node so that check can use
+it to set X[] arrays and so gen can alloc correct size because
+char [] = "This\0is\0\a\0\test" will currently make space for 5 bytes
+
+initializers for struct types

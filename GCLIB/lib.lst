@@ -1,0 +1,8 @@
+ -+o\D32\COMPILE.obj -+o\D32\ERROR.obj -+o\D32\DEFINE.obj 
+ -+o\D32\SYMBOL.obj -+o\D32\MEM.obj -+o\D32\NODE.obj 
+ -+o\D32\TOKENIZE.obj -+o\D32\PARSE.obj -+o\D32\TYPE.obj 
+ -+o\D32\CHECK.obj -+o\D32\LABEL.obj -+o\D32\OPT.obj 
+ -+o\D32\GEN.obj -+o\D32\GENEXPR.obj -+o\D32\GENFN.obj 
+ -+o\D32\GENGLOB.obj -+o\D32\GENOP.obj -+o\D32\KEEP.obj 
+ -+o\D32\CODMAINT.obj -+o\D32\LOADGX.obj -+o\D32\EXTERN.obj 
+ -+o\D32\INTERNAL.obj -+o\D32\VM.obj 

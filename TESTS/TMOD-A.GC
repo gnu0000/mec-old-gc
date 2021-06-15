@@ -1,0 +1,21 @@
+#include <GnuSys.Gh>
+
+
+int FunctionD (int i)
+   {
+   printf ("Function D [%d]\n", i);
+   return i * 2;
+   }
+
+int FunctionE (int i)
+   {
+   printf ("Function E [%d]\n", i);
+   return i * 2;
+   }
+
+int FunctionF (int i)
+   {
+   printf ("Function F [%d]\n", i);
+   return i * 2;
+   }
+
